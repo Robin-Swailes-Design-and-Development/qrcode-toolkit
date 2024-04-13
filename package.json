@@ -1,5 +1,6 @@
 {
   "version": "1.4.4",
+  "name": "Robin-Swailes-Design-and-Development-QR",
   "private": true,
   "scripts": {
     "build": "nuxi build",

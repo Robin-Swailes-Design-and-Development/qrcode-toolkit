@@ -1,7 +1,6 @@
 {
   "version": "1.4.4",
   "private": true,
-  "packageManager": "pnpm@8.6.12",
   "scripts": {
     "build": "nuxi build",
     "dev": "nuxi dev",
@@ -10,7 +9,6 @@
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint .",
     "release": "bumpp",
-    "postinstall": "nuxi prepare",
     "generate": "nuxi generate",
     "start:generate": "npx serve .output/public"
   },

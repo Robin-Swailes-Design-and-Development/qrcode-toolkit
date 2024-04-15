@@ -2,6 +2,10 @@
 import type { MarginObject } from '~/logic/types'
 import { resolveMargin } from '~/logic/utils'
 
+import {ref, computed } from 'vue';
+import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue'
+import OptionSlider from 'Robin-Swailes-Design-and-Development-QR/components/OptionSlider.vue'
+
 withDefaults(defineProps<{
   fullCustomizable?: boolean
 }>(), {

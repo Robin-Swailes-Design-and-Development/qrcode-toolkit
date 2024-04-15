@@ -2,6 +2,13 @@
 import type { ScanResult } from 'qr-scanner-wechat'
 import { scan } from 'qr-scanner-wechat'
 import type { State } from '~/logic/types'
+import {ref, computed, watch, watchEffect, onUnmounted} from 'vue';
+
+import SafariWarning from 'Robin-Swailes-Design-and-Development-QR/components/SafariWarning.vue'
+import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue'
+import OptionSlider from 'Robin-Swailes-Design-and-Development-QR/components/OptionSlider.vue'
+import OptionSelectGroup from 'Robin-Swailes-Design-and-Development-QR/components/OptionSelectGroup.vue'
+import OptionCheckbox from 'Robin-Swailes-Design-and-Development-QR/components/OptionCheckbox.vue'
 
 const props = defineProps<{
   state: State

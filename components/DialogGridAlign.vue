@@ -1,5 +1,13 @@
 <script setup lang="ts">
+import {ref} from 'vue';
+
 import type { State } from '~/logic/types'
+
+
+import GridLines from 'Robin-Swailes-Design-and-Development-QR/components/GridLines.vue'
+import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue'
+import OptionSlider from 'Robin-Swailes-Design-and-Development-QR/components/OptionSlider.vue'
+import SettingsMargin from 'Robin-Swailes-Design-and-Development-QR/components/SettingsMargin.vue'
 
 const props = defineProps<{
   modelValue: boolean

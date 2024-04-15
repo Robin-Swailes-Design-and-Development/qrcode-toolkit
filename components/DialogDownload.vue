@@ -5,6 +5,16 @@ import { hasParentWindow } from '~/logic/state'
 import { HightlightFactor } from '~/logic/diff'
 import type { Diff, State } from '~/logic/types'
 
+import {ref, watch} from 'vue';
+import { onKeyStroke} from '@vueuse/core';
+
+import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue'
+import OptionColor from 'Robin-Swailes-Design-and-Development-QR/components/OptionColor.vue'
+import OptionSelectGroup from 'Robin-Swailes-Design-and-Development-QR/components/OptionSelectGroup.vue'
+import OptionCheckbox from 'Robin-Swailes-Design-and-Development-QR/components/OptionCheckbox.vue'
+import SettingsCorrection from 'Robin-Swailes-Design-and-Development-QR/components/SettingsCorrection.vue'
+
+
 const props = defineProps<{
   modelValue: boolean
   state: State

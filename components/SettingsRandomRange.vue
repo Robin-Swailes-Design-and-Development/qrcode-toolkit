@@ -1,4 +1,9 @@
 <script setup lang="ts">
+
+import {computed} from 'vue';
+import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue'
+import OptionSlider from 'Robin-Swailes-Design-and-Development-QR/components/OptionSlider.vue'
+
 const props = defineProps<{
   max: number
   min: number

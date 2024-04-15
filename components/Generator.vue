@@ -9,7 +9,16 @@ import { MarkerSubShapeIcons, MarkerSubShapes, PixelStyleIcons, PixelStyles } fr
 import { getAspectRatio, sendQRCodeToCompare } from '../logic/utils'
 import {ref, computed, reactive, watch} from 'vue';
 import { useElementBounding, useDropZone } from '@vueuse/core';
-import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue'
+import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue' //VTooltip
+import OptionSlider from 'Robin-Swailes-Design-and-Development-QR/components/OptionSlider.vue'
+import OptionCheckbox from 'Robin-Swailes-Design-and-Development-QR/components/OptionCheckbox.vue'
+import OptionColor from 'Robin-Swailes-Design-and-Development-QR/components/OptionColor.vue'
+import OptionSelectGroup from 'Robin-Swailes-Design-and-Development-QR/components/OptionSelectGroup.vue'
+import SettingsMarkerStyle from 'Robin-Swailes-Design-and-Development-QR/components/SettingsMarkerStyle.vue'
+import SettingsMargin from 'Robin-Swailes-Design-and-Development-QR/components/SettingsMargin.vue'
+import SettingsRandomRange from 'Robin-Swailes-Design-and-Development-QR/components/SettingsRandomRange.vue'
+import ImageUpload from 'Robin-Swailes-Design-and-Development-QR/components/ImageUpload.vue'
+// import DialogScan from 'Robin-Swailes-Design-and-Development-QR/components/DialogScan.vue'
 
 
 const props = defineProps<{
@@ -48,7 +57,7 @@ function reset() {
 
 function downloadState() {
   const data = {
-    '//': 'Generator state of Anthony\'s QR Toolkit https://qrcode.antfu.me/',
+    '//': 'Generator state of RS\'s QR Toolkit https://qrcode.antfu.me/',
     ...state.value,
   }
 

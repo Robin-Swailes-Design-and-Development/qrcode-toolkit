@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+
+import {computed} from 'vue';
 import type { MarginObject } from '~/logic/types'
 import { resolveMargin } from '~/logic/utils'
 

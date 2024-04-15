@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { debounce } from 'perfect-debounce'
-import { sendParentEvent } from '~/logic/messaging'
-import { generateQRCode } from '~/logic/generate'
+import { sendParentEvent } from '../logic/messaging'
+import { generateQRCode } from '../logic/generate'
 import { dataUrlGeneratedQRCode, defaultGeneratorState, generateQRCodeInfo, hasParentWindow, isLargeScreen, qrcode } from '~/logic/state'
-import { view } from '~/logic/view'
-import type { State } from '~/logic/types'
-import { MarkerSubShapeIcons, MarkerSubShapes, PixelStyleIcons, PixelStyles } from '~/logic/types'
-import { getAspectRatio, sendQRCodeToCompare } from '~/logic/utils'
+import { view } from '../logic/view'
+import type { State } from '../logic/types'
+import { MarkerSubShapeIcons, MarkerSubShapes, PixelStyleIcons, PixelStyles } from '../logic/types'
+import { getAspectRatio, sendQRCodeToCompare } from '../logic/utils'
+import {ref, computed, reactive, watch} from 'vue';
+import { useElementBounding, useDropZone } from '@vueuse/core';
+import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue'
+
 
 const props = defineProps<{
   state: State

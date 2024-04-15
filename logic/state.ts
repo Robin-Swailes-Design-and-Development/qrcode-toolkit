@@ -1,6 +1,7 @@
-import { breakpointsTailwind } from '@vueuse/core'
+import { breakpointsTailwind, useLocalStorage, useDark, useBreakpoints, useToggle} from '@vueuse/core'
 import type { QrCodeGenerateResult } from 'uqr'
 import type { ComparionState, GeneratedQRInfo, QRCodeGeneratorState, ScannerState, State } from './types'
+import {ref, shallowRef} from 'vue';
 
 export const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
 export const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)

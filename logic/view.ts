@@ -1,3 +1,5 @@
+import {ref, watchEffect} from 'vue';
+
 export const view = ref<'generator' | 'compare' | 'credit' | 'verify' | 'camera'>(location.hash.slice(1) as any || 'generator')
 
 // @ts-expect-error back

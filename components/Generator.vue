@@ -2,12 +2,12 @@
 import { debounce } from 'perfect-debounce'
 import { sendParentEvent } from '../logic/messaging'
 import { generateQRCode } from '../logic/generate'
-import { dataUrlGeneratedQRCode, defaultGeneratorState, generateQRCodeInfo, hasParentWindow, isLargeScreen, qrcode } from '~/logic/state'
+import { dataUrlGeneratedQRCode, defaultGeneratorState, generateQRCodeInfo, hasParentWindow, isLargeScreen, qrcode } from '../logic/state'
 import { view } from '../logic/view'
 import type { State } from '../logic/types'
 import { MarkerSubShapeIcons, MarkerSubShapes, PixelStyleIcons, PixelStyles } from '../logic/types'
 import { getAspectRatio, sendQRCodeToCompare } from '../logic/utils'
-import {ref, computed, reactive, watch} from 'vue';
+import { ref, computed, reactive, watch } from 'vue';
 import { useElementBounding, useDropZone } from '@vueuse/core';
 import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue' //VTooltip
 import OptionSlider from 'Robin-Swailes-Design-and-Development-QR/components/OptionSlider.vue'
@@ -206,61 +206,39 @@ watch(
   { deep: true, immediate: true },
 )
 </script>
-
 <template>
-  <div grid="~ cols-[38rem_1fr] gap-2" lt-lg="flex flex-col-reverse">
-    <div flex="~ col gap-2">
-      <textarea
-        v-model="state.text"
-        placeholder="Text to encode"
-        border="~ base rounded"
-        bg-secondary px4 py2
-      />
-      <div border="~ base rounded" flex="~ col gap-2" p4>
+  <div class="grid grid-cols-[38rem_1fr] gap-2 lg:flex lg:flex-col-reverse">
+    <div class="flex flex-col gap-2">
+      <textarea v-model="state.text" placeholder="Text to encode"
+        class="border border-base rounded bg-secondary px-4 py-2" />
+      <div class="border border-base rounded flex flex-col gap-2 p-4">
         <OptionItem title="Error Correction" div>
-          <OptionSelectGroup
-            v-model="state.ecc"
-            :options="['L', 'M', 'Q', 'H']"
-          />
-          <label flex="~ gap-2 items-center" ml2>
+          <OptionSelectGroup v-model="state.ecc" :options="['L', 'M', 'Q', 'H']" />
+          <label class="flex items-center gap-2 ml-2">
             <OptionCheckbox v-model="state.boostECC" />
-            <span text-sm op75>Boost ECC</span>
+            <span class="text-sm opacity-75">Boost ECC</span>
           </label>
         </OptionItem>
 
         <OptionItem title="Mask Pattern">
-          <OptionSelectGroup
-            v-model="state.maskPattern"
-            :options="[-1, 0, 1, 2, 3, 4, 5, 6, 7]"
-            :titles="['Auto']"
-          />
+          <OptionSelectGroup v-model="state.maskPattern" :options="[-1, 0, 1, 2, 3, 4, 5, 6, 7]" :titles="['Auto']" />
         </OptionItem>
 
         <OptionItem title="Rotate" div>
-          <OptionSelectGroup
-            v-model="state.rotate"
-            :options="[0, 90, 180, 270]"
-            :titles="['0°', '90°', '180°', '270°']"
-          />
+          <OptionSelectGroup v-model="state.rotate" :options="[0, 90, 180, 270]"
+            :titles="['0°', '90°', '180°', '270°']" />
         </OptionItem>
 
-        <div border="t base" my1 />
+        <div class="border-t border-base my-1" />
 
         <OptionItem title="Pixel Style">
-          <OptionSelectGroup
-            v-model="state.pixelStyle"
-            :options="PixelStyles"
-            :classes="PixelStyleIcons"
-          />
+          <OptionSelectGroup v-model="state.pixelStyle" :options="PixelStyles" :classes="PixelStyleIcons" />
         </OptionItem>
 
         <OptionItem :title="state.markers.length ? 'Marker 1' : 'Markers'">
-          <div flex-auto />
-          <button
-            icon-button-sm
-            title="Toggle Expand"
-            @click="toggleMarkerStyleExpand"
-          >
+          <div class="flex-auto" />
+          <button class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none" title="Toggle Expand"
+            @click="toggleMarkerStyleExpand">
             <div :class="state.markers.length ? 'i-ri-arrow-up-s-line' : 'i-ri-arrow-down-s-line'" />
           </button>
         </OptionItem>
@@ -274,23 +252,16 @@ watch(
           <SettingsMarkerStyle :state="state.markers[0]" nested />
           <OptionItem title="Marker 3" />
           <SettingsMarkerStyle :state="state.markers[1]" nested />
-          <div border="t base" my1 />
+          <div class="border-t border-base my-1" />
         </template>
 
         <OptionItem v-if="qrcode?.version !== 1" title="Sub Markers">
-          <OptionSelectGroup
-            v-model="state.markerSub"
-            :options="MarkerSubShapes"
-            :classes="MarkerSubShapeIcons"
-          />
+          <OptionSelectGroup v-model="state.markerSub" :options="MarkerSubShapes" :classes="MarkerSubShapeIcons" />
         </OptionItem>
 
-        <div border="t base" my1 />
+        <div class="border-t border-base my-1" />
 
-        <SettingsMargin
-          v-model="state.margin"
-          :full-customizable="true"
-        />
+        <SettingsMargin v-model="state.margin" :full-customizable="true" />
 
         <OptionItem title="Margin Noise" description="Add some random data points to the margin">
           <OptionCheckbox v-model="state.marginNoise" />
@@ -301,77 +272,61 @@ watch(
             <OptionSlider v-model="state.marginNoiseRate" :min="0" :max="1" :step="0.01" />
           </OptionItem>
 
-          <SettingsRandomRange
-            v-model="state.marginNoiseOpacity"
-            title="Opacity"
-            nested
-            :min="0"
-            :max="1"
-            :step="0.01"
-          />
+          <SettingsRandomRange v-model="state.marginNoiseOpacity" title="Opacity" nested :min="0" :max="1"
+            :step="0.01" />
         </template>
         <OptionItem title="Safe Space">
-          <OptionSelectGroup
-            v-model="state.marginNoiseSpace"
-            :options="['full', 'marker', 'minimal', 'extreme', 'none']"
-          />
+          <OptionSelectGroup v-model="state.marginNoiseSpace"
+            :options="['full', 'marker', 'minimal', 'extreme', 'none']" />
         </OptionItem>
         <OptionItem title="Render Type">
-          <OptionSelectGroup
-            v-model="state.renderPointsType"
-            :options="['all', 'function', 'data', 'guide', 'marker']"
-          />
+          <OptionSelectGroup v-model="state.renderPointsType"
+            :options="['all', 'function', 'data', 'guide', 'marker']" />
         </OptionItem>
         <OptionItem title="Seed">
-          <input
-            v-model.number="state.seed" type="number"
-            border="~ base rounded"
-            bg-secondary py0.5 pl2 text-sm
-          >
-          <button
-            p1 icon-button-sm
-            title="Randomize"
-            @click="state.seed = Math.round(Math.random() * 100000)"
-          >
-            <div i-ri-refresh-line />
+          <input v-model.number="state.seed" type="number"
+            class="border border-base rounded bg-secondary py-0.5 pl-2 text-sm">
+          <button class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none" title="Randomize"
+            @click="state.seed = Math.round(Math.random() * 100000)">
+            <div class="i-ri-refresh-line" />
           </button>
         </OptionItem>
         <OptionItem title="Background" div>
           <OptionColor v-if="state.backgroundImage?.startsWith('#')" v-model="state.backgroundImage" />
-          <button v-else relative text-xs text-button>
-            <img
-              v-if="state.backgroundImage" :src="state.backgroundImage"
-              absolute inset-0 z-0 h-full w-full rounded object-cover op50
-            >
-            <div i-ri-upload-line z-1 />
-            <div z-1>
+          <button v-else class="relative text-xs text-button">
+            <img v-if="state.backgroundImage" :src="state.backgroundImage"
+              class="absolute inset-0 z-0 h-full w-full rounded object-cover opacity-50">
+            <div class="i-ri-upload-line z-1" />
+            <div class="z-1">
               Upload
             </div>
             <ImageUpload v-model="state.backgroundImage" />
           </button>
-          <button v-if="state.backgroundImage" icon-button-sm title="Clear">
-            <div i-carbon-close @click="state.backgroundImage = undefined" />
+          <button v-if="state.backgroundImage" class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
+            title="Clear">
+            <div class="i-carbon-close" @click="state.backgroundImage = undefined" />
           </button>
-          <div flex-auto />
-          <button v-if="!state.backgroundImage" icon-button-sm title="Switch to Color">
-            <div i-ri-paint-fill @click="state.backgroundImage = '#888888'" />
+          <div class="flex-auto" />
+          <button v-if="!state.backgroundImage"
+            class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none" title="Switch to Color">
+            <div class="ri-paint-fill" @click="state.backgroundImage = '#888888'" />
           </button>
         </OptionItem>
 
-        <div border="t base" my1 />
+        <div class="border-t border-base my-1" />
 
         <OptionItem title="Colors" div @reset="() => { state.lightColor = '#ffffff'; state.darkColor = '#000000' }">
-          <div flex="~ gap-2">
+          <div class="flex gap-2">
             <OptionColor v-model="state.lightColor" />
             <OptionColor v-model="state.darkColor" />
-            <label flex="~ gap-2 items-center" ml2>
+            <label class="flex items-center gap-2 ml-2">
               <OptionCheckbox v-model="state.invert" />
-              <span text-sm op75>Invert</span>
+              <span class="text-sm opacity-75">Invert</span>
             </label>
           </div>
         </OptionItem>
 
-        <div border="t base" my1 />
+        <div class="border-t border-base my-1" />
 
         <OptionItem title="Min Version">
           <OptionSlider v-model="state.minVersion" :min="1" :max="state.maxVersion" :step="1" />
@@ -385,13 +340,10 @@ watch(
           <OptionSlider v-model="state.scale" :min="1" :max="50" :step="1" unit="px" />
         </OptionItem>
 
-        <div border="t base" my1 />
+        <div class="border-t border-base my-1" />
 
         <OptionItem title="Effect">
-          <OptionSelectGroup
-            v-model="state.effect"
-            :options="['none', 'crystalize', 'liquidify']"
-          />
+          <OptionSelectGroup v-model="state.effect" :options="['none', 'crystalize', 'liquidify']" />
         </OptionItem>
 
         <template v-if="state.effect === 'crystalize'">
@@ -413,14 +365,11 @@ watch(
 
         <template v-if="state.effect !== 'none'">
           <OptionItem title="Effect Timing">
-            <OptionSelectGroup
-              v-model="state.effectTiming"
-              :options="['before', 'after']"
-            />
+            <OptionSelectGroup v-model="state.effectTiming" :options="['before', 'after']" />
           </OptionItem>
         </template>
 
-        <div border="t base" my1 />
+        <div class="border-t border-base my-1" />
 
         <OptionItem title="Transform" />
         <OptionItem title="Perspective X" nested @reset="state.transformPerspectiveX = 0">
@@ -433,117 +382,99 @@ watch(
           <OptionSlider v-model="state.transformScale" :min="0.5" :max="2" :step="0.01" :default="1" />
         </OptionItem>
       </div>
-      <div flex="~ gap-2">
-        <button
-          text-sm op75 text-button hover:op100
-          @click="downloadState()"
-        >
-          <div i-ri-download-2-line />
+      <div class="flex gap-2">
+        <button class="text-sm opacity-75 text-button hover:opacity-100" @click="downloadState()">
+          <div class="i-ri-download-2-line" />
           Save state
         </button>
-        <button
-
-          relative text-sm op75 text-button hover:op100
-        >
-          <div i-ri-upload-2-line />
+        <button class="relative text-sm opacity-75 text-button hover:opacity-100">
+          <div class="i-ri-upload-2-line" />
           Load state
-          <input
-            type="file" accept="application/json"
-            absolute bottom-0 left-0 right-0 top-0 z-10
-            max-h-full max-w-full cursor-pointer opacity-0.1
-            @input="readState"
-          >
+          <input type="file" accept="application/json"
+            class="absolute bottom-0 left-0 right-0 top-0 z-10 max-h-full max-w-full cursor-pointer opacity-0"
+            @input="readState">
         </button>
-        <div flex-auto />
-        <button
-          text-sm op75 text-button hover:text-red hover:op100
-          @click="reset()"
-        >
-          <div i-ri-delete-bin-6-line />
+        <div class="flex-auto" />
+        <button class="text-sm opacity-75 text-button hover:text-red hover:opacity-100" @click="reset()">
+          <div class="i-ri-delete-bin-6-line" />
           Reset State
         </button>
       </div>
     </div>
     <div ref="rightPanelEl">
-      <div
-        flex="~ col gap-2"
-        :style="floating ? {
-          position: 'fixed',
-          top: '10px',
-          left: `${rightPanelRect.left}px`,
-          width: `${rightPanelRect.width}px`,
-        } : {}"
-      >
-        <canvas ref="canvas" w-full width="1000" height="1000" border="~ base rounded" />
+      <div class="flex flex-col gap-2" :style="floating ? {
+        position: 'fixed',
+        top: '10px',
+        left: `${rightPanelRect.left}px`,
+        // width: `${rightPanelRect.width}px`,
+        width: `20vw`,
+      } : {}">
+        <canvas ref="canvas" class="w-full" width="1000" height="1000" border="~ base rounded" />
 
-        <div v-if="qrcode" border="~ base rounded" p3 pl6 pr0 flex="~ col gap-2">
-          <div grid="~ gap-1 cols-6 items-center">
-            <div text-sm op50>
+        <div v-if="qrcode" class="border border-base rounded p-3 pl-6 pr-0 flex flex-col gap-2">
+          <div class="grid grid-cols-6 gap-1 items-center">
+            <div class="text-sm opacity-50">
               Size
             </div>
             <div>
               {{ qrcode.size }}
             </div>
-            <div text-sm op50>
+            <div class="text-sm opacity-50">
               Mask
             </div>
             <div>
               {{ qrcode.maskPattern }}
             </div>
-            <div text-sm op50>
+            <div class="text-sm opacity-50">
               Version
             </div>
             <div>
               {{ qrcode.version }}
             </div>
           </div>
-          <div v-if="generateQRCodeInfo" grid="~ gap-1 cols-[1.5fr_2fr_1fr_1.5fr] items-center">
-            <div text-sm op50>
+          <div v-if="generateQRCodeInfo" class="grid grid-cols-[1.5fr_2fr_1fr_1.5fr] gap-1 items-center">
+            <div class="text-sm opacity-50">
               Dimension
             </div>
-            <div text-sm>
+            <div class="text-sm">
               {{ generateQRCodeInfo.width }} x {{ generateQRCodeInfo.height }}
             </div>
-            <div text-sm op50>
+            <div class="text-sm opacity-50">
               Aspect
             </div>
-            <div text-sm>
+            <div class="text-sm">
               {{ getAspectRatio(generateQRCodeInfo.width, generateQRCodeInfo.height) }}
             </div>
           </div>
         </div>
-        <button
-          py2 text-sm text-button
-          @click="download()"
-        >
-          <div i-ri-download-line />
+        <button class="py-2 text-sm text-button" @click="download()">
+          <div class="i-ri-download-line" />
           Download
         </button>
-        <button
-          py2 text-sm text-button
-          @click="sendCompare()"
-        >
-          <div i-ri-send-backward />
+        <button class="py-2 text-sm text-button" @click="sendCompare()">
+          <div class="i-ri-send-backward" />
           Send to Compare
         </button>
-        <button
-          v-if="hasParentWindow"
-          py2 text-sm text-button
-          @click="sendToWebUI()"
-        >
-          <div i-ri-file-upload-line />
+        <button v-if="hasParentWindow" class="py-2 text-sm text-button" @click="sendToWebUI()">
+          <div class="i-ri-file-upload-line" />
           Send to ControlNet
         </button>
         <div v-if="mayNotScannable" border="~ amber-6/60 rounded" bg-amber-5:10 px3 py2 text-sm text-amber-6>
           This QR Code may or may not be scannable. Please verify before using.
         </div>
         <div v-if="hasNonCenteredMargin" border="~ yellow-6/60 rounded" bg-yellow-5:10 px3 py2 text-sm text-yellow-6>
-          The <b>compare tab</b> does not support non-centered QR Code yet. If you generated with this QR Code, you'll need to verify the result manually.
+          The <b>compare tab</b> does not support non-centered QR Code yet. If you generated with this QR Code, you'll
+          need
+          to verify the result manually.
         </div>
-        <div v-if="state.transformPerspectiveX !== 0 || state.transformPerspectiveY !== 0 || state.transformScale !== 1" border="~ yellow-6/60 rounded" bg-yellow-5:10 px3 py2 text-sm text-yellow-6>
-          The <b>compare tab</b> does not support transformations. If you generated with this QR Code, you'll need to verify the result manually.
+        <div v-if="state.transformPerspectiveX !== 0 || state.transformPerspectiveY !== 0 || state.transformScale !== 1"
+          border="~ yellow-6/60 rounded" bg-yellow-5:10 px3 py2 text-sm text-yellow-6>
+          The <b>compare tab</b> does not support transformations. If you generated with this QR Code, you'll need to
+          verify
+          the result manually.
         </div>
-        <div v-if="state.renderPointsType !== 'all'" border="~ indigo/60 rounded" bg-indigo-5:10 px3 py2 text-sm text-indigo>
+        <div v-if="state.renderPointsType !== 'all'" border="~ indigo/60 rounded" bg-indigo-5:10 px3 py2 text-sm
+          text-indigo>
           This is a partial QR Code. It does <b>not</b> contain all the necessary data to be scannable.
         </div>
       </div>
@@ -553,11 +484,8 @@ watch(
   </div>
 
   <div v-if="isOverDropZone" fixed bottom-0 left-0 right-0 top-0 z-200 flex bg-black:20 backdrop-blur-10>
-    <div
-      id="upload-zone-qrcode" flex="~ col gap-3 items-center justify-center" m10 ml-1 w-full op40
-      :class="uploadTarget === 'qrcode' ? 'bg-gray:20 op100 border-base' : ''"
-      border="3 dashed transparent rounded-xl"
-    >
+    <div id="upload-zone-qrcode" flex="~ col gap-3 items-center justify-center" m10 ml-1 w-full op40
+      :class="uploadTarget === 'qrcode' ? 'bg-gray:20 op100 border-base' : ''" border="3 dashed transparent rounded-xl">
       <div i-carbon-qr-code text-20 />
       <div text-xl>
         Scan QR Code
@@ -565,11 +493,6 @@ watch(
     </div>
   </div>
 
-  <DialogScan
-    v-if="uploadQR"
-    :model-value="true"
-    :qrcode="uploadQR"
-    :state="props.state"
-    @update:model-value="uploadQR = undefined"
-  />
+  <DialogScan v-if="uploadQR" :model-value="true" :qrcode="uploadQR" :state="props.state"
+    @update:model-value="uploadQR = undefined" />
 </template>

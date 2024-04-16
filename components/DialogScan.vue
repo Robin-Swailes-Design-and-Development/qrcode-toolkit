@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { State } from '~/logic/types'
-import { scanQRCodeFromDataUrl } from '~/logic/scan'
+import type { State } from '../logic/types'
+import { scanQRCodeFromDataUrl } from '../logic/scan'
 import {ref, watch} from 'vue';
 
 const props = defineProps<{

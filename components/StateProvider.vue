@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { deepMerge } from '@antfu/utils'
 import { sendParentEvent } from '../logic/messaging'
-import { dataUrlScannerUpload, defaultState, hasParentWindow, isLargeScreen, showGridHelper, storeIndex } from '~/logic/state'
+import { dataUrlScannerUpload, defaultState, hasParentWindow, isLargeScreen, showGridHelper, storeIndex } from '../logic/state'
 import { view } from '../logic/view'
 import type { State } from '../logic/types'
 import { useLocalStorage, useEventListener} from '@vueuse/core';

@@ -11,27 +11,33 @@ const value = defineModel<string | number>('modelValue', {
 </script>
 
 <template>
-  <fieldset flex="~ inline wrap" border="~ base rounded" of-hidden text-xs>
+  <fieldset class="flex flex-wrap inline-flex overflow-hidden text-xs border border-base rounded">
     <label
-      v-for="i, idx of options" :key="i"
-      border="b base" relative mb--1px hover:bg-secondary px-2 py-1
+      v-for="(i, idx) of options"
+      :key="i"
+      class="relative px-2 py-1 mb--1px hover:bg-offwhite"
       :class="[
         idx ? 'border-l border-base ml--1px' : '',
-        i === value ? 'bg-active' : '',
+        i === value ? 'bg-nopsslate text-white' : '',
+        'border-b border-base',
       ]"
       :title="titles?.[idx]"
     >
       <div
         :class="[
-          i === value ? '' : 'op35',
+          i === value ? '' : 'opacity-35',
           titles?.[idx] ? '' : 'capitalize',
           classes?.[idx] || '',
         ]"
-      >{{ titles?.[idx] ?? i }}</div>
+      >
+        {{ titles?.[idx] ?? i }}
+      </div>
       <input
-        v-model="value" type="radio" :value="i"
+        v-model="value"
+        type="radio"
+        :value="i"
         :title="titles?.[idx]"
-        absolute inset-0 op-0.1
+        class="absolute inset-0 opacity-0"
       >
     </label>
   </fieldset>

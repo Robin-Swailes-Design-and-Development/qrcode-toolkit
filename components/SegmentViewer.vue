@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import type { Segment } from '~/logic/types'
+import type { Segment } from '../logic/types'
+
+import {ref, watchEffect} from 'vue';
 
 const props = defineProps<{
   segment: Segment

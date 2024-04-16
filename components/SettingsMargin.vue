@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { MarginObject } from '~/logic/types'
-import { resolveMargin } from '~/logic/utils'
+import type { MarginObject } from '../logic/types'
+import { resolveMargin } from '../logic/utils'
 
 import {ref, computed } from 'vue';
 import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue'

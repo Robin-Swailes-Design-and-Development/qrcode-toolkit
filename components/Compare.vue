@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { debounce } from 'perfect-debounce'
-import { sendQRCodeToCompare } from '~/logic/utils'
-import type { Segment, State } from '~/logic/types'
-import { HightlightFactor, compareSegments, segmentImage } from '~/logic/diff'
-import { defaultCompareState, showDownloadDialog, showGridHelper } from '~/logic/state'
-import { view } from '~/logic/view'
+import { sendQRCodeToCompare } from '../logic/utils'
+import type { Segment, State } from '../logic/types'
+import { HightlightFactor, compareSegments, segmentImage } from '../logic/diff'
+import { defaultCompareState, showDownloadDialog, showGridHelper } from '../logic/state'
+import { view } from '../logic/view'
+
+import {ref, computed, shallowRef, watch} from 'vue';
 
 const props = defineProps<{
   state: State

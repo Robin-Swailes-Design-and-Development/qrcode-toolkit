@@ -4,9 +4,11 @@ import { debounce } from 'perfect-debounce'
 import type { ScanResult } from 'qr-scanner-wechat'
 import { ready, scan } from 'qr-scanner-wechat'
 import { shuffle } from '@antfu/utils'
-import { dataUrlScannerUpload, defaultScannerState } from '~/logic/state'
-import { view } from '~/logic/view'
-import type { State } from '~/logic/types'
+import { dataUrlScannerUpload, defaultScannerState } from '../logic/state'
+import { view } from '../logic/view'
+import type { State } from '../logic/types'
+
+import {ref, computed, onMounted, watch} from 'vue';
 
 const props = defineProps<{
   state: State

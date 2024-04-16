@@ -13,23 +13,32 @@ const value = defineModel<number>('modelValue', {
 </script>
 
 <template>
-  <div relative h-22px w-60 flex-auto>
+  <div class="relative h-22px w-60 flex-auto">
     <input
-      v-model.number="value" type="range" class="slider"
+      v-model.number="value"
+      type="range"
+      class="slider absolute bottom-0 left-0 right-0 top-0 z-10 w-full align-top"
       v-bind="props"
-      absolute bottom-0 left-0 right-0 top-0 z-10 w-full align-top
     >
     <span
       v-if="props.default != null"
-      border="r base" absolute bottom-0 top-0 h-full w-1px op75
-      :style="{
-        left: `${(props.default - min) / (max - min) * 100}%`,
-      }"
+      class="border-r border-base absolute bottom-0 top-0 h-full w-1px opacity-75"
+      :style="{ left: `${(props.default - min) / (max - min) * 100}%` }"
     />
   </div>
-  <div relative h-22px>
-    <input v-model.number="value" type="number" v-bind="props" border="~ base rounded" m0 w-20 bg-secondary pl2 align-top text-sm>
-    <span v-if="props.unit" pointer-events-none absolute right-1 top-0.5 text-xs op25>{{ props.unit }}</span>
+  <div class="relative h-22px">
+    <input
+      v-model.number="value"
+      type="number"
+      class="border border-base rounded m-0 w-20 bg-secondary pl-2 align-top text-sm"
+      v-bind="props"
+    >
+    <span
+      v-if="props.unit"
+      class="pointer-events-none absolute right-1 top-0.5 text-xs opacity-25"
+    >
+      {{ props.unit }}
+    </span>
   </div>
 </template>
 
@@ -41,7 +50,7 @@ const value = defineModel<number>('modelValue', {
   opacity: 0.7;
   -webkit-transition: .2s;
   transition: opacity .2s;
-  --uno: border border-base rounded of-hidden bg-secondary;
+  @apply border border-base rounded overflow-hidden bg-secondary;
 }
 
 .slider:hover {

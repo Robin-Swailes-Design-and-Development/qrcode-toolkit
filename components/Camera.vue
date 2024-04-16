@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ScanResult } from 'qr-scanner-wechat'
 import { scan } from 'qr-scanner-wechat'
-import type { State } from '~/logic/types'
+import type { State } from '../logic/types'
 import {ref, computed, watch, watchEffect, onUnmounted} from 'vue';
 
 import SafariWarning from 'Robin-Swailes-Design-and-Development-QR/components/SafariWarning.vue'

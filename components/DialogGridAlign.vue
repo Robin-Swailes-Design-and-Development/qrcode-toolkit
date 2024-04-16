@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 
-import type { State } from '~/logic/types'
+import type { State } from '../logic/types'
 
 
 import GridLines from 'Robin-Swailes-Design-and-Development-QR/components/GridLines.vue'

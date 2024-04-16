@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import type { ComparionState } from 'logic/types'
+import type { ComparionState } from '../logic/types'
+
+import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue'
+import OptionSlider from 'Robin-Swailes-Design-and-Development-QR/components/OptionSlider.vue'
+import OptionSelectGroup from 'Robin-Swailes-Design-and-Development-QR/components/OptionSelectGroup.vue'
 
 defineProps<{
   state: ComparionState

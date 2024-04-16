@@ -2,8 +2,8 @@
 
 
 import {computed} from 'vue';
-import type { MarginObject } from '~/logic/types'
-import { resolveMargin } from '~/logic/utils'
+import type { MarginObject } from '../logic/types'
+import { resolveMargin } from '../logic/utils'
 
 const props = defineProps<{
   gridSize: number

@@ -2,8 +2,8 @@
 
 import { computed } from 'vue';
 
-import type { QrCodeGeneratorMarkerState } from 'logic/types'
-import { MarkerInnerShapeIcons, MarkerInnerShapes, MarkerShapeIcons, MarkerShapes, PixelStyleIcons, PixelStyles } from '~/logic/types'
+import type { QrCodeGeneratorMarkerState } from '../logic/types'
+import { MarkerInnerShapeIcons, MarkerInnerShapes, MarkerShapeIcons, MarkerShapes, PixelStyleIcons, PixelStyles } from '../logic/types'
 import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue'
 import OptionSelectGroup from 'Robin-Swailes-Design-and-Development-QR/components/OptionSelectGroup.vue'
 

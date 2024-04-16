@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isIOS, isSafari } from '~/logic/state'
+import { isIOS, isSafari } from '../logic/state'
 </script>
 
 <template>

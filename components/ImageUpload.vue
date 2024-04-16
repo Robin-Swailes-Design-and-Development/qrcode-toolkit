@@ -1,6 +1,5 @@
 <script setup lang="ts">
-
-import {ref} from 'vue';
+import { ref } from 'vue';
 
 defineProps<{
   modelValue?: string | undefined
@@ -15,9 +14,7 @@ const value = ref<any>()
 async function read(e: Event) {
   value.value = ''
   const file = (e.target as HTMLInputElement).files?.[0]
-  if (!file)
-    return
-
+  if (!file) return
   const reader = new FileReader()
   const promise = new Promise<string>((resolve, reject) => {
     reader.onload = () => {
@@ -32,10 +29,10 @@ async function read(e: Event) {
 
 <template>
   <input
-    type="file" accept="image/*"
+    type="file"
+    accept="image/*"
     :value="value"
-    absolute bottom-0 left-0 right-0 top-0 z-10
-    max-h-full max-w-full cursor-pointer opacity-0.1
+    class="absolute inset-0 z-10 max-h-full max-w-full cursor-pointer opacity-0"
     @input="read"
   >
 </template>

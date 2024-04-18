@@ -296,7 +296,8 @@ watch(
           <button v-else class="relative text-xs text-button">
             <img v-if="state.backgroundImage" :src="state.backgroundImage"
               class="absolute inset-0 z-0 h-full w-full rounded object-cover opacity-50">
-            <div class="i-ri-upload-line z-1" />
+            <div class="arrow-up-tray
+ z-1" />
             <div class="z-1">
               Upload
             </div>
@@ -311,6 +312,30 @@ watch(
             class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none" title="Switch to Color">
             <div class="ri-paint-fill" @click="state.backgroundImage = '#888888'" />
           </button>
+        </OptionItem>
+
+        <OptionItem title="Promo Text">
+          <input v-model="state.promoText" type="text"
+            class="border border-base rounded bg-secondary py-0.5 pl-2 text-sm">
+        </OptionItem>
+
+
+        <OptionItem title="Logo" div>
+          <OptionColor v-if="state.logoImage?.startsWith('#')" v-model="state.logoImage" />
+          <button v-else class="relative text-xs text-button">
+            <img v-if="state.logoImage" :src="state.logoImage"
+              class="absolute inset-0 z-0 h-full w-full rounded object-cover opacity-50">
+            <div class="i-ri-upload-line z-1" />
+            <div class="z-1">
+              Upload
+            </div>
+            <ImageUpload v-model="state.logoImage" />
+          </button>
+          <button v-if="state.logoImage" class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
+            title="Clear">
+            <div class="i-carbon-close" @click="state.logoImage = undefined" />
+          </button>
+          <div class="flex-auto" />
         </OptionItem>
 
         <div class="border-t border-base my-1" />

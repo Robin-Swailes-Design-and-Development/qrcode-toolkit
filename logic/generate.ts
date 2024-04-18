@@ -366,6 +366,7 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
 
   const darkHex = invert ? state.lightColor : state.darkColor
 
+  // Draw the QR code pixels
   for (const { isDark, marker, x, y, isBorder, isIgnored } of pixels) {
     if (isIgnored)
       continue
@@ -379,6 +380,7 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
 
     const lightColor = invert ? _darkColor : state.lightColor
     const darkColor = invert ? state.lightColor : _darkColor
+    
     ctx.fillStyle = darkColor
 
     const cX = x * cell + halfcell
@@ -573,12 +575,28 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
       ctx.fillRect(x * cell, y * cell, cell, cell)
     }
 
-    function dot(color = isDark ? darkColor : lightColor) {
-      ctx.strokeStyle = 'none'
-      ctx.fillStyle = color
-      ctx.beginPath()
-      ctx.arc(x * cell + halfcell, y * cell + halfcell, halfcell, 0, Math.PI * 2)
-      ctx.fill()
+    //safari dots- leaves fragmanets using bigger dots? TODO
+    function dot(color = isDark ? darkColor : lightColor, dotScale = 1.03) {
+      ctx.strokeStyle = 'none';
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x * cell + halfcell, y * cell + halfcell, halfcell * dotScale, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function diamond(color = isDark ? darkColor : lightColor, scale = 1) {
+      ctx.strokeStyle = 'none';
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      const size = halfcell * scale;
+      const centerX = x * cell + halfcell;
+      const centerY = y * cell + halfcell;
+      ctx.moveTo(centerX, centerY - size);
+      ctx.lineTo(centerX + size, centerY);
+      ctx.lineTo(centerX, centerY + size);
+      ctx.lineTo(centerX - size, centerY);
+      ctx.closePath();
+      ctx.fill();
     }
 
     function corner(index: number, color?: string) {
@@ -625,6 +643,9 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
 
     if (_pixelStyle === 'dot') {
       dot()
+    }
+    else if (_pixelStyle === 'diamond') {
+      diamond()
     }
     else if (_pixelStyle === 'squircle') {
       dot()
@@ -756,6 +777,9 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
     ctx.putImageData(newData2, 0, 0)
   }
 
+  await drawLogo(width, height)
+  await drawText(width, height)
+
   if (state.effectTiming === 'before')
     await applyBackground()
 
@@ -840,6 +864,7 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
     perspective.draw(pos)
   }
 
+  
   async function applyBackground() {
     ctx.restore()
     const clone = document.createElement('canvas')
@@ -870,10 +895,62 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
 
     ctx.drawImage(clone, 0, 0)
   }
+
+  async function drawLogo(width: number, height: number) {
+    if (!state.logoImage)
+      return
+  
+    ctx.restore()
+    const clone = document.createElement('canvas')
+    clone.width = width
+    clone.height = height
+    clone.getContext('2d')!.putImageData(ctx.getImageData(0, 0, width, height), 0, 0)
+  
+    const img = new Image()
+    img.src = state.logoImage
+    await new Promise(resolve => img.onload = resolve)
+  
+    const logoSize = Math.floor(Math.min(width, height) * 0.28)
+    const logoX = Math.floor((width - logoSize) / 2)
+    const logoY = Math.floor((height - logoSize) / 2)
+  
+    // Draw the logo image with aspect ratio
+    const imgRatio = img.width / img.height
+    const logoWidth = logoSize
+    const logoHeight = logoSize / imgRatio
+  
+    if (imgRatio > 1) {
+      ctx.drawImage(img, logoX, logoY + (logoSize - logoHeight) / 2, logoWidth, logoHeight)
+    } else {
+      ctx.drawImage(img, logoX + (logoSize - logoWidth) / 2, logoY, logoWidth, logoHeight)
+    }
+  }
+
+  async function drawText(width: number, height: number) {
+    if (!state.promoText)
+      return
+  
+    const textWidth = Math.floor(width * 0.25)
+    const textHeight = Math.floor(height * 0.075)
+    const textX = Math.floor((width - textWidth) / 2)
+    const textY = Math.floor(height - textHeight - 10)
+  
+    ctx.fillStyle = '#FFFFFF'
+    ctx.fillRect(textX, textY, textWidth, textHeight)
+  
+    ctx.fillStyle = '#000000'
+    ctx.font = 'bold 32px Arial'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+  
+    const text = state.promoText.slice(0, 8).toUpperCase()
+    ctx.fillText(text, textX + textWidth / 2, textY + textHeight / 2)
+  }
+
 }
 
 function createQrInstance(state: QRCodeGeneratorState) {
-  const qr = encode(state.text || 'qrcode.antfu.me', {
+  const qr = encode(state.text || 'nops.co.uk', {
     minVersion: state.minVersion,
     maxVersion: state.maxVersion,
     ecc: state.ecc,

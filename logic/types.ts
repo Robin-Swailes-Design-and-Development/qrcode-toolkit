@@ -5,6 +5,7 @@ export const PixelStyles = [
   'squircle',
   'row',
   'column',
+  'diamond',
 ] as const
 
 // @unocss-include
@@ -120,6 +121,8 @@ export interface QRCodeGeneratorState extends QrCodeGeneratorMarkerState {
   effectLiquidifyRadius: number
   effectLiquidifyThreshold: number
   backgroundImage?: string
+  logoImage?: string
+  promoText?: string
 
   transformPerspectiveX: number
   transformPerspectiveY: number

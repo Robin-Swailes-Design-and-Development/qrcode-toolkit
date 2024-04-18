@@ -62,7 +62,7 @@ const value = defineModel<number>('modelValue', {
   appearance: none;
   width: 5px;
   height: 22px;
-  background: #fff;
+  background: #3e5f78;
   cursor: pointer;
   z-index: 10;
 }
@@ -70,7 +70,7 @@ const value = defineModel<number>('modelValue', {
 .slider::-moz-range-thumb {
   width: 5px;
   height: 22px;
-  background: #fff;
+  background: #3e5f78;
   cursor: pointer;
   z-index: 10;
 }

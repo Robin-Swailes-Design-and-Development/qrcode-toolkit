@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { randomStr } from '@antfu/utils'
-import { generateQRCode } from '~/logic/generate'
-import { defaultGeneratorState } from '~/logic/state'
-import type { MarginObject, QRCodeGeneratorState } from '~/logic/types'
-import { MarkerInnerShapes, MarkerShapes, PixelStyles } from '~/logic/types'
+import { generateQRCode } from '../logic/generate'
+import { defaultGeneratorState } from '../logic/state'
+import type { MarginObject, QRCodeGeneratorState } from '../logic/types'
+import { MarkerInnerShapes, MarkerShapes, PixelStyles } from '../logic/types'
+import {ref, useLocalStorage} from 'vue';
 
 interface BatchState {
   filenamePrefix: string

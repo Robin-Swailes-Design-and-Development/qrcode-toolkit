@@ -364,7 +364,8 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
     return getOrder(a) - getOrder(b)
   })
 
-  const darkHex = invert ? state.lightColor : state.darkColor
+  const darkHex = state.darkColor
+  const lightHex = state.lightColor
 
   // Draw the QR code pixels
   for (const { isDark, marker, x, y, isBorder, isIgnored } of pixels) {
@@ -373,13 +374,29 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
 
     let _pixelStyle = pixelStyle
 
-    const opacity = isBorder ? getBorderOpacity(x, y) : 1
-    const _darkColor = opacity === 1
-      ? state.darkColor
-      : darkHex + Math.round(opacity * 255).toString(16).padStart(2, '0')
+    // const opacity = getBorderOpacity(x, y)
 
-    const lightColor = invert ? _darkColor : state.lightColor
-    const darkColor = invert ? state.lightColor : _darkColor
+    let darkOpacity = state.pixelOpacity
+    let lightOpacity = state.pixelOpacity
+
+    if (state.pixelLightOpacity != 1) {
+      lightOpacity = invert ? state.pixelDarkOpacity : state.pixelLightOpacity
+    } 
+    if (state.pixelDarkOpacity != 1) {
+      darkOpacity = invert ? state.pixelLightOpacity : state.pixelDarkOpacity
+    } 
+    
+
+    const _darkColor = state.pixelOpacity === 1
+      ? state.darkColor
+      : darkHex + Math.round(darkOpacity * 255).toString(16).padStart(2, '0')
+
+    const _lighColor = state.pixelOpacity === 1
+    ? state.lightColor
+    : lightHex + Math.round(lightOpacity * 255).toString(16).padStart(2, '0')
+
+    const lightColor = invert ? _darkColor : _lighColor
+    const darkColor = invert ? _lighColor : _darkColor
     
     ctx.fillStyle = darkColor
 
@@ -570,13 +587,13 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
       }
     }
 
-    function square(color = isDark ? darkColor : lightColor) {
+    function square(color = isDark ? darkColor : lightColor, dotScale = state.dotScale) {
       ctx.fillStyle = color
-      ctx.fillRect(x * cell, y * cell, cell, cell)
+      ctx.fillRect(x * cell, y * cell, cell * dotScale, cell)
     }
 
     //safari dots- leaves fragmanets using bigger dots? TODO
-    function dot(color = isDark ? darkColor : lightColor, dotScale = 1.03) {
+    function dot(color = isDark ? darkColor : lightColor, dotScale = state.dotScale + 0.03) {
       ctx.strokeStyle = 'none';
       ctx.fillStyle = color;
       ctx.beginPath();
@@ -584,11 +601,11 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
       ctx.fill();
     }
 
-    function diamond(color = isDark ? darkColor : lightColor, scale = 1) {
+    function diamond(color = isDark ? darkColor : lightColor, dotScale = state.dotScale) {
       ctx.strokeStyle = 'none';
       ctx.fillStyle = color;
       ctx.beginPath();
-      const size = halfcell * scale;
+      const size = halfcell * dotScale;
       const centerX = x * cell + halfcell;
       const centerY = y * cell + halfcell;
       ctx.moveTo(centerX, centerY - size);
@@ -910,7 +927,7 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
     img.src = state.logoImage
     await new Promise(resolve => img.onload = resolve)
   
-    const logoSize = Math.floor(Math.min(width, height) * 0.28)
+    const logoSize = Math.floor(Math.min(width, height) * state.logoScale)
     const logoX = Math.floor((width - logoSize) / 2)
     const logoY = Math.floor((height - logoSize) / 2)
   
@@ -929,17 +946,17 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
   async function drawText(width: number, height: number) {
     if (!state.promoText)
       return
-  
+   
     const textWidth = Math.floor(width * 0.25)
     const textHeight = Math.floor(height * 0.075)
     const textX = Math.floor((width - textWidth) / 2)
     const textY = Math.floor(height - textHeight - 10)
-  
-    ctx.fillStyle = '#FFFFFF'
+
+    ctx.fillStyle = state.promoTextColor ? state.promoTextColor : (invert ? state.darkColor : state.lightColor)
     ctx.fillRect(textX, textY, textWidth, textHeight)
   
-    ctx.fillStyle = '#000000'
-    ctx.font = 'bold 32px Arial'
+    ctx.fillStyle = state.promoTextColor ? state.promoTextColor : (invert ? state.lightColor : state.darkColor)
+    ctx.font = 'bold '+ state.promoTextSize +'px Arial'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
   

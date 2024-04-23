@@ -28,6 +28,7 @@ export function defaultGeneratorState(): QRCodeGeneratorState {
     ecc: 'M',
     margin: 2,
     scale: 20,
+    dotScale: 1,
     lightColor: '#ffffff',
     darkColor: '#000000',
     pixelStyle: 'rounded',
@@ -48,6 +49,15 @@ export function defaultGeneratorState(): QRCodeGeneratorState {
     seed: Math.round(Math.random() * 1000000),
     marginNoiseSpace: 'marker',
     renderPointsType: 'all',
+
+    separateOpacity: false,
+    pixelOpacity: 1,
+    pixelLightOpacity: 1,
+    pixelDarkOpacity: 1,
+
+    logoScale: 0.28,
+
+    promoTextSize: 32,
 
     effect: 'none',
     effectTiming: 'after',

@@ -97,6 +97,11 @@ export interface QRCodeGeneratorState extends QrCodeGeneratorMarkerState {
   ecc: 'L' | 'M' | 'Q' | 'H'
   margin: number | MarginObject
   scale: number
+  dotScale: number
+  separateOpacity: boolean
+  pixelOpacity: number
+  pixelLightOpacity: number
+  pixelDarkOpacity: number 
   seed: number
   lightColor: string
   darkColor: string
@@ -122,7 +127,12 @@ export interface QRCodeGeneratorState extends QrCodeGeneratorMarkerState {
   effectLiquidifyThreshold: number
   backgroundImage?: string
   logoImage?: string
+  logoScale: number 
+
   promoText?: string
+  promoTextColor?: string //new
+  promoTextSize?: number //new
+  promoTextBackground?: string //new
 
   transformPerspectiveX: number
   transformPerspectiveY: number

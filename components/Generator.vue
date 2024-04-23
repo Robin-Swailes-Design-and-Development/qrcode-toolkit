@@ -314,11 +314,24 @@ watch(
           </button>
         </OptionItem>
 
+        <OptionItem title="Pixel Opacity">
+          <OptionSlider v-model="state.pixelOpacity" :min="0" :max="1" :step="0.01" />
+        </OptionItem>        
+        <OptionItem title="Light Opacity">
+          <OptionSlider v-model="state.pixelLightOpacity" :min="0" :max="1" :step="0.01" />
+        </OptionItem>     
+        <OptionItem title="Dark Opacity">
+          <OptionSlider v-model="state.pixelDarkOpacity" :min="0" :max="1" :step="0.01" />
+        </OptionItem>           
+          
         <OptionItem title="Promo Text">
           <input v-model="state.promoText" type="text"
             class="border border-base rounded bg-secondary py-0.5 pl-2 text-sm">
         </OptionItem>
 
+        <OptionItem title="Promo Font Size">
+          <OptionSlider v-model="state.promoTextSize" :min="10" :max="60" :step="1" unit="px" />
+        </OptionItem>
 
         <OptionItem title="Logo" div>
           <OptionColor v-if="state.logoImage?.startsWith('#')" v-model="state.logoImage" />
@@ -336,6 +349,10 @@ watch(
             <div class="i-carbon-close" @click="state.logoImage = undefined" />
           </button>
           <div class="flex-auto" />
+        </OptionItem>
+
+        <OptionItem title="Logo Scale">
+          <OptionSlider v-model="state.logoScale" :min="0.2" :max="0.6" :step="0.01" unit="%" />
         </OptionItem>
 
         <div class="border-t border-base my-1" />
@@ -364,6 +381,11 @@ watch(
         <OptionItem title="Pixel Size">
           <OptionSlider v-model="state.scale" :min="1" :max="50" :step="1" unit="px" />
         </OptionItem>
+
+        <OptionItem title="Pixel Scale (smaller pixel fill)">
+          <OptionSlider v-model="state.dotScale" :min="0.5" :max="1.1" :step="0.01" unit="%" />
+        </OptionItem>
+
 
         <div class="border-t border-base my-1" />
 

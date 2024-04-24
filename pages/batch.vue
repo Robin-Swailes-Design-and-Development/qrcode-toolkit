@@ -4,7 +4,18 @@ import { generateQRCode } from '../logic/generate'
 import { defaultGeneratorState } from '../logic/state'
 import type { MarginObject, QRCodeGeneratorState } from '../logic/types'
 import { MarkerInnerShapes, MarkerShapes, PixelStyles } from '../logic/types'
-import {ref, useLocalStorage} from 'vue';
+import {ref} from 'vue';
+import OptionItem from 'Robin-Swailes-Design-and-Development-QR/components/OptionItem.vue' //VTooltip
+import OptionSlider from 'Robin-Swailes-Design-and-Development-QR/components/OptionSlider.vue'
+import OptionCheckbox from 'Robin-Swailes-Design-and-Development-QR/components/OptionCheckbox.vue'
+import OptionColor from 'Robin-Swailes-Design-and-Development-QR/components/OptionColor.vue'
+import OptionSelectGroup from 'Robin-Swailes-Design-and-Development-QR/components/OptionSelectGroup.vue'
+import SettingsMarkerStyle from 'Robin-Swailes-Design-and-Development-QR/components/SettingsMarkerStyle.vue'
+import SettingsMargin from 'Robin-Swailes-Design-and-Development-QR/components/SettingsMargin.vue'
+import SettingsRandomRange from 'Robin-Swailes-Design-and-Development-QR/components/SettingsRandomRange.vue'
+import ImageUpload from 'Robin-Swailes-Design-and-Development-QR/components/ImageUpload.vue'
+
+import { useLocalStorage, useEventListener} from '@vueuse/core';
 
 interface BatchState {
   filenamePrefix: string
@@ -71,29 +82,42 @@ async function download() {
   }
 }
 </script>
-
 <template>
-  <div flex="justify-center" hidden p10 pb15 md:flex>
-    <div flex="~ col gap-4" class="min-h-[calc(100vh-100px)] w-250">
+  <div class="justify-center  p-10 pb-15 md:flex">
+    <div class="flex flex-col gap-4 min-h-[calc(100vh-100px)] w-250">
       <p>
         This page is to generate a batch of QR codes with random settings, for training purposes.
       </p>
-      <div border="~ base rounded" p4>
+      <div class="border border-base rounded p-4">
         <canvas ref="canvas" />
       </div>
-      <div flex="~ col gap-2" border="~ base rounded" p4>
+      <div class="flex flex-col gap-2 border border-base rounded p-4">
         <OptionItem title="Filename Prefix">
-          <input v-model="options.filenamePrefix" type="text" border="~ base rounded" w-auto bg-secondary pl2>
+          <input
+            v-model="options.filenamePrefix"
+            type="text"
+            class="border border-base rounded w-auto bg-secondary pl-2"
+          >
         </OptionItem>
         <OptionItem title="Amount">
-          <OptionSlider v-model="options.amount" :min="1" :max="1000" :step="1" />
+          <OptionSlider
+            v-model="options.amount"
+            :min="1"
+            :max="1000"
+            :step="1"
+          />
         </OptionItem>
         <OptionItem title="Content Length">
-          <OptionSlider v-model="options.stringLength" :min="1" :max="100" :step="1" />
+          <OptionSlider
+            v-model="options.stringLength"
+            :min="1"
+            :max="100"
+            :step="1"
+          />
         </OptionItem>
         <SettingsMargin v-model="options.margin" />
       </div>
-      <div text-button @click="download">
+      <div class="text-button" @click="download">
         Generate
       </div>
     </div>

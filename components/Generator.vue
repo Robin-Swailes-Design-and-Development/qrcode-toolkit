@@ -57,15 +57,26 @@ function reset() {
 
 function downloadState() {
   const data = {
-    '//': 'Generator state of RS\'s QR Toolkit https://qrcode.antfu.me/',
+    '//': 'Generator state of RS\'s QR Toolkit',
     ...state.value,
   }
+  
 
   const text = JSON.stringify(data, null, 2)
   const a = document.createElement('a')
   a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }))
   a.download = `qr-options-${state.value.text.replace(/\W/g, '_')}.json`
   a.click()
+}
+
+// save state to db 
+function saveState() {
+  
+}
+
+// load state from db 
+function loadState() {
+
 }
 
 async function readState(e: Event) {
@@ -323,7 +334,7 @@ watch(
         <OptionItem title="Dark Opacity">
           <OptionSlider v-model="state.pixelDarkOpacity" :min="0" :max="1" :step="0.01" />
         </OptionItem>           
-          
+
         <OptionItem title="Promo Text">
           <input v-model="state.promoText" type="text"
             class="border border-base rounded bg-secondary py-0.5 pl-2 text-sm">

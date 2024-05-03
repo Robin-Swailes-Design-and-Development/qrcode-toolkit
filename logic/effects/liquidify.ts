@@ -1,5 +1,5 @@
 import { imageDataRGB } from 'stackblur-canvas'
-import { colorHexToRgb } from '~/logic/utils'
+import { colorHexToRgb } from '../../logic/utils'
 
 export function liquidify(
   imageData: ImageData,

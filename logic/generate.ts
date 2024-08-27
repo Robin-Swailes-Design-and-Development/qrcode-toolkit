@@ -588,8 +588,11 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
     }
 
     function square(color = isDark ? darkColor : lightColor, dotScale = state.dotScale) {
-      ctx.fillStyle = color
-      ctx.fillRect(x * cell, y * cell, cell * (dotScale), cell)
+      const size = cell * dotScale;
+      const xPos = x * cell + (cell - size) / 2;
+      const yPos = y * cell + (cell - size) / 2;
+      ctx.fillStyle = color;
+      ctx.fillRect(xPos, yPos, size, size);
     }
 
     //safari dots- leaves fragmanets using bigger dots? TODO

@@ -15,10 +15,10 @@ const value = defineModel<string | number>('modelValue', {
     <label
       v-for="(i, idx) of options"
       :key="i"
-      class="relative px-2 py-1 mb--1px hover:bg-offwhite"
+      class="relative px-2 py-1 mb--1px hover:bg-muted"
       :class="[
         idx ? 'border-l border-base ml--1px' : '',
-        i === value ? 'bg-nopsslate text-white' : '',
+        i === value ? 'bg-secondary text-white' : '',
         'border-b border-base',
       ]"
       :title="titles?.[idx]"

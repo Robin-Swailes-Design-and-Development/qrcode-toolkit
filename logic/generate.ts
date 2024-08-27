@@ -967,7 +967,7 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
 }
 
 function createQrInstance(state: QRCodeGeneratorState) {
-  const qr = encode(state.text || 'nops.co.uk', {
+  const qr = encode(state.text || 'qrcoutures.com', {
     minVersion: state.minVersion,
     maxVersion: state.maxVersion,
     ecc: state.ecc,

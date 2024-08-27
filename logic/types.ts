@@ -16,6 +16,7 @@ export const PixelStyleIcons = [
   'i-custom-pixel-squircle',
   'i-custom-pixel-row',
   'i-custom-pixel-column',
+  'i-custom-pixel-diamond',
 ]
 
 export const MarkerShapes = [

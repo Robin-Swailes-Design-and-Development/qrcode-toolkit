@@ -19,40 +19,33 @@ function reset() {
 <template>
   <component
     :is="div ? 'div' : 'label'"
-    class="flex flex-row gap-2 items-center select-none"
+    class="d-flex flex-row gap-2 align-items-center user-select-none"
   >
-    <div class="w-35 flex items-center gap-1">
+    <div class="w-35 d-flex align-items-center gap-1">
       <div
         v-if="nested"
         class="opacity-40"
-        :class="typeof nested === 'number' ? 'i-ri-corner-down-right-line' : ''"
+        :class="typeof nested === 'number' ? 'bi bi-arrow-return-right' : ''"
         :style="typeof nested === 'number' ? { marginLeft: `${nested * 0.5 + 0.5}rem` } : { marginLeft: '0.25rem' }"
-      />
+      ></div>
       <div
         v-if="!description"
-        class="text-sm opacity-75"
+        class="small opacity-75"
         @dblclick="reset"
       >
         {{ title }}
       </div>
-      <VTooltip
+      <div
         v-else
-        placement="left"
-        distance="10"
+        class="small opacity-75"
+        @dblclick="reset"
+        data-bs-toggle="tooltip"
+        data-bs-placement="left"
+        :title="description"
       >
-        <div
-          class="text-sm opacity-75"
-          @dblclick="reset"
-        >
-          {{ title }}
-        </div>
-        <template #popper>
-          <div class="text-sm">
-            {{ description }}
-          </div>
-        </template>
-      </VTooltip>
+        {{ title }}
+      </div>
     </div>
-    <slot />
+    <slot></slot>
   </component>
 </template>

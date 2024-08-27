@@ -218,9 +218,6 @@ watch(
 )
 </script>
 
-
-
-
 <template>
   <div class="container-fluid">
     <div class="row">
@@ -229,7 +226,7 @@ watch(
           <textarea v-model="state.text" placeholder="Text to encode" class="form-control"></textarea>
           <div class="card">
             <div class="card-body">
-              <div class="mb-3">
+              <div class="mb-3 d-none">
                 <label class="form-label">Error Correction</label>
                 <div class="d-flex align-items-center">
                   <OptionSelectGroup v-model="state.ecc" :options="['L', 'M', 'Q', 'H']" class="me-2" />
@@ -240,7 +237,7 @@ watch(
                 </div>
               </div>
 
-              <div class="mb-3">
+              <div class="mb-3 d-none">
                 <label class="form-label">Mask Pattern</label>
                 <OptionSelectGroup v-model="state.maskPattern" :options="[-1, 0, 1, 2, 3, 4, 5, 6, 7]" :titles="['Auto']" />
               </div>
@@ -287,7 +284,7 @@ watch(
 
               <hr>
 
-              <SettingsMargin v-model="state.margin" :full-customizable="true" />
+              <SettingsMargin class="d-none" v-model="state.margin" :full-customizable="true" />
 
               <div class="mb-3 d-none">
                 <label class="form-label">Margin Noise</label>
@@ -415,7 +412,7 @@ watch(
                 <OptionSlider v-model="state.maxVersion" :min="state.minVersion" :max="40" :step="1" />
               </div>
 
-              <div class="mb-3">
+              <div class="mb-3 d-none">
                 <label class="form-label">Pixel Size</label>
                 <OptionSlider v-model="state.scale" :min="1" :max="50" :step="1" unit="px" />
               </div>
@@ -504,7 +501,7 @@ watch(
             <div class="card-body">
               <div class="row g-2">
                 <div class="col-4">
-<small class="text-muted">Size</small>
+                  <small class="text-muted">Size</small>
                   <div>{{ qrcode.size }}</div>
                 </div>
                 <div class="col-4">

@@ -17,9 +17,9 @@ const value = defineModel<string | number>('modelValue', {
       :key="i"
       class="position-relative px-2 py-1 mb-n1 hover-bg-light"
       :class="[
-        idx ? 'border-start border-secondary ms-n1' : '',
+        idx ? 'border-start ms-n1' : '',
         i === value ? 'bg-secondary text-white' : '',
-        'border-bottom border-secondary'
+        'border-bottom'
       ]"
       :title="titles?.[idx]"
     >

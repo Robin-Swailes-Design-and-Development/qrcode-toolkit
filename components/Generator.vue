@@ -215,7 +215,7 @@ watch(
               <button class="nav-link active" id="style-tab" data-bs-toggle="tab" data-bs-target="#style" type="button" role="tab" aria-controls="style" aria-selected="true">Style & Markers</button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="colors-tab" data-bs-toggle="tab" data-bs-target="#colors" type="button" role="tab" aria-controls="colors" aria-selected="false">Colors</button>
+              <button class="nav-link" id="colors-tab" data-bs-toggle="tab" data-bs-target="#colors" type="button" role="tab" aria-controls="colors" aria-selected="false">Colours</button>
             </li>
             <li class="nav-item" role="presentation">
               <button class="nav-link" id="logo-bg-tab" data-bs-toggle="tab" data-bs-target="#logo-bg" type="button" role="tab" aria-controls="logo-bg" aria-selected="false">Logo & Background</button>
@@ -304,7 +304,7 @@ watch(
 
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" v-model="state.invert" id="invertColors">
-                    <label class="form-check-label" for="invertColors">Invert Colors</label>
+                    <label class="form-check-label" for="invertColors">Invert Colours</label>
                   </div>
                 </div>
               </div>

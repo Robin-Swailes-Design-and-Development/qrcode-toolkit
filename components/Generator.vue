@@ -111,6 +111,29 @@ async function readState(e: Event) {
   }
 }
 
+const colorPalette = [
+  '#000000', // Black
+  '#FFFFFF', // White
+  '#808080', // Gray
+  '#C0C0C0', // Silver
+  '#1E90FF', // DodgerBlue
+  '#4169E1', // RoyalBlue
+  '#32CD32', // LimeGreen
+  '#228B22', // ForestGreen
+  '#FF0000', // Red
+  '#DC143C', // Crimson
+  '#FFA500', // Orange
+  '#FFD700', // Gold
+  '#FFFF00', // Yellow
+  '#8B4513', // SaddleBrown
+  '#800080', // Purple
+  '#FF1493', // DeepPink
+  '#00CED1', // DarkTurquoise
+];
+
+const patternColors = [...colorPalette];
+const backgroundColors = [...colorPalette];
+
 const debouncedRun = debounce(run, 250, { trailing: true })
 
 const mayNotScannable = computed(() => {
@@ -248,38 +271,41 @@ watch(
             
             <div class="tab-pane fade" id="colors" role="tabpanel" aria-labelledby="colors-tab">
               <div class="card">
-                <div class="card-body">                  
-                  <div class="mb-3">
-                    <label class="form-label">Pattern Colors</label>
-                    <OptionColor v-model="state.darkColor" class="me-2" />
+                <div class="card-body">
+                  <div class="mb-4">
+                    <label class="form-label">Pattern Color</label>
+                    <div class="d-flex align-items-center mb-2">
+                      <OptionColor v-model="state.darkColor" class="me-2" />
+                    </div>
                     <div class="d-flex flex-wrap gap-2">
-                      <button v-for="color in ['#000000', '#333333', '#666666', '#999999', '#CCCCCC']" 
+                      <button v-for="color in patternColors" 
                               :key="color" 
                               class="btn btn-sm" 
-                              :style="{ backgroundColor: color, width: '30px', height: '30px' }"
-                              @click="state.darkColor = color"></button>
+                              :style="{ backgroundColor: color, width: '30px', height: '30px', border: color === state.darkColor ? '2px solid #007bff' : '1px solid #ced4da' }"
+                              @click="state.darkColor = color"
+                              :title="color"></button>
                     </div>
                   </div>
 
-                  <div class="mb-3">
-                    <OptionColor v-model="state.lightColor" class="me-2" />
+                  <div class="mb-4">
                     <label class="form-label">Background Color</label>
+                    <div class="d-flex align-items-center mb-2">
+                      <OptionColor v-model="state.lightColor" class="me-2" />
+                    </div>
                     <div class="d-flex flex-wrap gap-2">
-                      <button v-for="color in ['#FFFFFF', '#F0F0F0', '#E0E0E0', '#D0D0D0', '#C0C0C0']" 
+                      <button v-for="color in backgroundColors" 
                               :key="color" 
                               class="btn btn-sm" 
-                              :style="{ backgroundColor: color, width: '30px', height: '30px' }"
-                              @click="state.lightColor = color"></button>
+                              :style="{ backgroundColor: color, width: '30px', height: '30px', border: color === state.lightColor ? '2px solid #007bff' : '1px solid #ced4da' }"
+                              @click="state.lightColor = color"
+                              :title="color"></button>
                     </div>
                   </div>
-                  
-                    <div class="d-flex align-items-center">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" v-model="state.invert" id="invertColors">
-                        <label class="form-check-label" for="invertColors">Invert</label>
-                      </div>
-                  </div>
 
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" v-model="state.invert" id="invertColors">
+                    <label class="form-check-label" for="invertColors">Invert Colors</label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -325,13 +351,6 @@ watch(
                       </button>
 
                     </div>
-
-                  <div class="d-flex align-items-center">
-                    <div class="mb-3">
-                      <label class="form-label">Background Pixel Opacity</label>
-                      <OptionSlider v-model="state.pixelLightOpacity" :min="0" :max="1" :step="0.1" />
-                    </div>
-                  </div>
                   </div>
               </div>
             </div>

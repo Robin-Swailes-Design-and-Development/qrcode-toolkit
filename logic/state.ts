@@ -26,9 +26,9 @@ export function defaultGeneratorState(): QRCodeGeneratorState {
   return {
     text: '',
     ecc: 'H',
-    margin: 2,
+    margin: 1,
     scale: 50,
-    dotScale: 1,
+    dotScale: 0.98,
     lightColor: '#ffffff',
     darkColor: '#000000',
     pixelStyle: 'rounded',

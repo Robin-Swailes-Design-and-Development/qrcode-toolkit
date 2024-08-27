@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import VTooltip from 'v-tooltip'
 defineProps<{
   title: string
   nested?: boolean | number
@@ -19,25 +18,25 @@ function reset() {
 <template>
   <component
     :is="div ? 'div' : 'label'"
-    class="d-flex flex-row gap-2 align-items-center user-select-none"
+    class="d-flex flex-row align-items-center user-select-none mb-3"
   >
-    <div class="w-35 d-flex align-items-center gap-1">
+    <div class="w-35 d-flex align-items-center">
       <div
         v-if="nested"
-        class="opacity-40"
+        class="text-muted me-1"
         :class="typeof nested === 'number' ? 'bi bi-arrow-return-right' : ''"
         :style="typeof nested === 'number' ? { marginLeft: `${nested * 0.5 + 0.5}rem` } : { marginLeft: '0.25rem' }"
       />
       <div
         v-if="!description"
-        class="small opacity-75"
+        class="small text-muted"
         @dblclick="reset"
       >
         {{ title }}
       </div>
       <div
         v-else
-        class="small opacity-75"
+        class="small text-muted"
         @dblclick="reset"
         data-bs-toggle="tooltip"
         data-bs-placement="left"
@@ -46,6 +45,8 @@ function reset() {
         {{ title }}
       </div>
     </div>
-    <slot />
+    <div class="ms-2">
+      <slot />
+    </div>
   </component>
 </template>

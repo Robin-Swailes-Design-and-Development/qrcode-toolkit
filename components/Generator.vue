@@ -230,11 +230,11 @@ watch(
               <div class="card">
                 <div class="card-body">
                   <div class="mb-3">
-                    <label class="form-label">Pixel Style</label>
+                    <label class="form-label d-block">Pixel Style</label>
                     <OptionSelectGroup v-model="state.pixelStyle" :options="PixelStyles" :classes="PixelStyleIcons" />
                   </div>
                   
-                  <div class="mb-3">
+                  <div class="mb">
                     <label class="form-label">{{ state.markers.length ? 'Marker 1' : 'Markers' }}</label>
                     <button class="d-none btn btn-outline-secondary btn-sm float-end" @click="toggleMarkerStyleExpand">
                       <i :class="state.markers.length ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
@@ -256,13 +256,13 @@ watch(
                     <SettingsMarkerStyle :state="state.markers[1]" nested />
                   </template>
                   
-                  <div v-if="qrcode?.version !== 1" class="mb-3">
+                  <div v-if="qrcode?.version !== 1" class="mb-3 d-none">
                     <label class="form-label">Sub Markers</label>
                     <OptionSelectGroup v-model="state.markerSub" :options="MarkerSubShapes" :classes="MarkerSubShapeIcons" />
                   </div>
                   
                   <div class="mb-3">
-                    <label class="form-label">Rotate</label>
+                    <label class="form-label d-block d-none">Rotate</label>
                     <OptionSelectGroup v-model="state.rotate" :options="[0, 90, 180, 270]" :titles="['0°', '90°', '180°', '270°']" />
                   </div>
                 </div>

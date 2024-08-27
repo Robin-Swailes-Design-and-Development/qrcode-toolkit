@@ -17,7 +17,7 @@ const value = defineModel<number>('modelValue', {
     <input
       v-model.number="value"
       type="range"
-      class="slider absolute bottom-0 left-0 right-0 top-0 z-10 w-full align-top border border-base rounded overflow-hidden bg-secondary"
+      class="slider absolute bottom-0 left-0 right-0 top-0 z-10 w-full align-top border border-base rounded overflow-hidden"
       v-bind="props"
     >
     <span
@@ -30,7 +30,7 @@ const value = defineModel<number>('modelValue', {
     <input
       v-model.number="value"
       type="number"
-      class="border border-base rounded m-0 w-20 bg-secondary pl-2 align-top text-sm "
+      class="border border-base rounded m-0 w-20 pl-2 align-top text-sm "
       v-bind="props"
     >
     <span

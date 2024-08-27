@@ -6,10 +6,10 @@ const value = defineModel<string>('modelValue', {
 
 <template>
   <div
-    class="relative flex items-center gap-2 bg-secondary p-0.5 px-1.5 border border-base rounded"
+    class="relative flex items-center gap-2 p-0.5 px-1.5 border border-base rounded"
   >
     <div
-      class="h-4 w-4 border border-base rounded-full"
+      class="color-pick border border-base rounded-full"
       :style="{ background: value }"
     />
     <div class="text-sm font-mono">
@@ -22,3 +22,13 @@ const value = defineModel<string>('modelValue', {
     >
   </div>
 </template>
+
+
+
+<style scoped>
+.color-pick{
+  width: 30px;
+  height: 30px;
+}
+
+</style>

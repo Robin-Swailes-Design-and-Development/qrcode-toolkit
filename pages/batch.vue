@@ -96,7 +96,7 @@ async function download() {
           <input
             v-model="options.filenamePrefix"
             type="text"
-            class="border border-base rounded w-auto bg-secondary pl-2"
+            class="border border-base rounded w-auto pl-2"
           >
         </OptionItem>
         <OptionItem title="Amount">

@@ -289,7 +289,7 @@ watch(
 
               <SettingsMargin v-model="state.margin" :full-customizable="true" />
 
-              <div class="mb-3">
+              <div class="mb-3 d-none">
                 <label class="form-label">Margin Noise</label>
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" v-model="state.marginNoise" id="marginNoise">
@@ -298,7 +298,7 @@ watch(
               </div>
 
               <template v-if="state.marginNoise">
-                <div class="mb-3">
+                <div class="mb-3 d-none">
                   <label class="form-label">Noise Rate</label>
                   <OptionSlider v-model="state.marginNoiseRate" :min="0" :max="1" :step="0.01" />
                 </div>
@@ -306,17 +306,17 @@ watch(
                 <SettingsRandomRange v-model="state.marginNoiseOpacity" title="Opacity" :min="0" :max="1" :step="0.01" />
               </template>
 
-              <div class="mb-3">
+              <div class="mb-3 d-none">
                 <label class="form-label">Safe Space</label>
                 <OptionSelectGroup v-model="state.marginNoiseSpace" :options="['full', 'marker', 'minimal', 'extreme', 'none']" />
               </div>
 
-              <div class="mb-3">
+              <div class="mb-3 d-none">
                 <label class="form-label">Render Type</label>
                 <OptionSelectGroup v-model="state.renderPointsType" :options="['all', 'function', 'data', 'guide', 'marker']" />
               </div>
 
-              <div class="mb-3">
+              <div class="mb-3 d-none">
                 <label class="form-label">Seed</label>
                 <div class="input-group">
                   <input v-model.number="state.seed" type="number" class="form-control">
@@ -331,7 +331,7 @@ watch(
                 <div class="d-flex align-items-center">
                   <OptionColor v-if="state.backgroundImage?.startsWith('#')" v-model="state.backgroundImage" />
                   <button v-else class="btn btn-outline-secondary position-relative">
-                    <img v-if="state.backgroundImage" :src="state.backgroundImage" class="position-absolute top-0 start-0 w-100 h-100 rounded opacity-50">
+                    <img v-if="state.backgroundImage" :src="state.backgroundImage" class="top-0 start-0 w-100 h-100 rounded opacity-50">
                     <i class="bi-upload"></i> Upload
                     <ImageUpload v-model="state.backgroundImage" />
                   </button>
@@ -374,7 +374,7 @@ watch(
                 <div class="d-flex align-items-center">
                   <OptionColor v-if="state.logoImage?.startsWith('#')" v-model="state.logoImage" />
                   <button v-else class="btn btn-outline-secondary position-relative">
-                    <img v-if="state.logoImage" :src="state.logoImage" class="position-absolute top-0 start-0 w-100 h-100 rounded opacity-50">
+                    <img v-if="state.logoImage" :src="state.logoImage" class="top-0 start-0 w-100 h-100 rounded opacity-50">
                     <i class="bi-upload"></i> Upload
                     <ImageUpload v-model="state.logoImage" />
                   </button>

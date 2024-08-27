@@ -217,340 +217,334 @@ watch(
   { deep: true, immediate: true },
 )
 </script>
+
+
+
+
 <template>
-  <div class="grid grid-cols-[38rem_1fr] gap-2 lg:flex lg:flex-col-reverse">
-    <div class="flex flex-col gap-2">
-      <textarea v-model="state.text" placeholder="Text to encode"
-        class="border border-base rounded bg-secondary px-4 py-2" />
-      <div class="border border-base rounded flex flex-col gap-2 p-4">
-        <OptionItem title="Error Correction" div>
-          <OptionSelectGroup v-model="state.ecc" :options="['L', 'M', 'Q', 'H']" />
-          <label class="flex items-center gap-2 ml-2">
-            <OptionCheckbox v-model="state.boostECC" />
-            <span class="text-sm opacity-75">Boost ECC</span>
-          </label>
-        </OptionItem>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-5">
+        <div class="d-flex flex-column gap-2">
+          <textarea v-model="state.text" placeholder="Text to encode" class="form-control"></textarea>
+          <div class="card">
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label">Error Correction</label>
+                <div class="d-flex align-items-center">
+                  <OptionSelectGroup v-model="state.ecc" :options="['L', 'M', 'Q', 'H']" class="me-2" />
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" v-model="state.boostECC" id="boostECC">
+                    <label class="form-check-label" for="boostECC">Boost ECC</label>
+                  </div>
+                </div>
+              </div>
 
-        <OptionItem title="Mask Pattern">
-          <OptionSelectGroup v-model="state.maskPattern" :options="[-1, 0, 1, 2, 3, 4, 5, 6, 7]" :titles="['Auto']" />
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">Mask Pattern</label>
+                <OptionSelectGroup v-model="state.maskPattern" :options="[-1, 0, 1, 2, 3, 4, 5, 6, 7]" :titles="['Auto']" />
+              </div>
 
-        <OptionItem title="Rotate" div>
-          <OptionSelectGroup v-model="state.rotate" :options="[0, 90, 180, 270]"
-            :titles="['0°', '90°', '180°', '270°']" />
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">Rotate</label>
+                <OptionSelectGroup v-model="state.rotate" :options="[0, 90, 180, 270]" :titles="['0°', '90°', '180°', '270°']" />
+              </div>
 
-        <div class="border-t border-base my-1" />
+              <hr>
 
-        <OptionItem title="Pixel Style">
-          <OptionSelectGroup v-model="state.pixelStyle" :options="PixelStyles" :classes="PixelStyleIcons" />
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">Pixel Style</label>
+                <OptionSelectGroup v-model="state.pixelStyle" :options="PixelStyles" :classes="PixelStyleIcons" />
+              </div>
 
-        <OptionItem :title="state.markers.length ? 'Marker 1' : 'Markers'">
-          <div class="flex-auto" />
-          <button class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none" title="Toggle Expand"
-            @click="toggleMarkerStyleExpand">
-            <div :class="state.markers.length ? 'i-ri-arrow-up-s-line' : 'i-ri-arrow-down-s-line'" />
-          </button>
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">{{ state.markers.length ? 'Marker 1' : 'Markers' }}</label>
+                <button class="btn btn-outline-secondary btn-sm float-end" @click="toggleMarkerStyleExpand">
+                  <i :class="state.markers.length ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                </button>
+              </div>
 
-        <template v-if="!state.markers.length">
-          <SettingsMarkerStyle :state="state" nested number="Marker" />
-        </template>
-        <template v-else>
-          <SettingsMarkerStyle :state="state" nested />
-          <OptionItem title="Marker 2" />
-          <SettingsMarkerStyle :state="state.markers[0]" nested />
-          <OptionItem title="Marker 3" />
-          <SettingsMarkerStyle :state="state.markers[1]" nested />
-          <div class="border-t border-base my-1" />
-        </template>
+              <template v-if="!state.markers.length">
+                <SettingsMarkerStyle :state="state" nested number="Marker" />
+              </template>
+              <template v-else>
+                <SettingsMarkerStyle :state="state" nested />
+                <div class="mb-3">
+                  <label class="form-label">Marker 2</label>
+                </div>
+                <SettingsMarkerStyle :state="state.markers[0]" nested />
+                <div class="mb-3">
+                  <label class="form-label">Marker 3</label>
+                </div>
+                <SettingsMarkerStyle :state="state.markers[1]" nested />
+                <hr>
+              </template>
 
-        <OptionItem v-if="qrcode?.version !== 1" title="Sub Markers">
-          <OptionSelectGroup v-model="state.markerSub" :options="MarkerSubShapes" :classes="MarkerSubShapeIcons" />
-        </OptionItem>
+              <div v-if="qrcode?.version !== 1" class="mb-3">
+                <label class="form-label">Sub Markers</label>
+                <OptionSelectGroup v-model="state.markerSub" :options="MarkerSubShapes" :classes="MarkerSubShapeIcons" />
+              </div>
 
-        <div class="border-t border-base my-1" />
+              <hr>
 
-        <SettingsMargin v-model="state.margin" :full-customizable="true" />
+              <SettingsMargin v-model="state.margin" :full-customizable="true" />
 
-        <OptionItem title="Margin Noise" description="Add some random data points to the margin">
-          <OptionCheckbox v-model="state.marginNoise" />
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">Margin Noise</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" v-model="state.marginNoise" id="marginNoise">
+                  <label class="form-check-label" for="marginNoise">Add some random data points to the margin</label>
+                </div>
+              </div>
 
-        <template v-if="state.marginNoise">
-          <OptionItem title="Noise Rate" nested description="Percentage of whether a black point should be placed">
-            <OptionSlider v-model="state.marginNoiseRate" :min="0" :max="1" :step="0.01" />
-          </OptionItem>
+              <template v-if="state.marginNoise">
+                <div class="mb-3">
+                  <label class="form-label">Noise Rate</label>
+                  <OptionSlider v-model="state.marginNoiseRate" :min="0" :max="1" :step="0.01" />
+                </div>
 
-          <SettingsRandomRange v-model="state.marginNoiseOpacity" title="Opacity" nested :min="0" :max="1"
-            :step="0.01" />
-        </template>
-        <OptionItem title="Safe Space">
-          <OptionSelectGroup v-model="state.marginNoiseSpace"
-            :options="['full', 'marker', 'minimal', 'extreme', 'none']" />
-        </OptionItem>
-        <OptionItem title="Render Type">
-          <OptionSelectGroup v-model="state.renderPointsType"
-            :options="['all', 'function', 'data', 'guide', 'marker']" />
-        </OptionItem>
-        <OptionItem title="Seed">
-          <input v-model.number="state.seed" type="number"
-            class="border border-base rounded bg-secondary py-0.5 pl-2 text-sm">
-          <button class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none" title="Randomize"
-            @click="state.seed = Math.round(Math.random() * 100000)">
-            <div class="i-ri-refresh-line" />
-          </button>
-        </OptionItem>
-        <OptionItem title="Background" div>
-          <OptionColor v-if="state.backgroundImage?.startsWith('#')" v-model="state.backgroundImage" />
-          <button v-else class="relative text-xs text-button">
-            <img v-if="state.backgroundImage" :src="state.backgroundImage"
-              class="absolute inset-0 z-0 h-full w-full rounded object-cover opacity-50">
-            <div class="arrow-up-tray
- z-1" />
-            <div class="z-1">
-              Upload
-            </div>
-            <ImageUpload v-model="state.backgroundImage" />
-          </button>
-          <button v-if="state.backgroundImage" class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
-            title="Clear">
-            <div class="i-carbon-close" @click="state.backgroundImage = undefined" />
-          </button>
-          <div class="flex-auto" />
-          <button v-if="!state.backgroundImage"
-            class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none" title="Switch to Color">
-            <div class="ri-paint-fill" @click="state.backgroundImage = '#888888'" />
-          </button>
-        </OptionItem>
+                <SettingsRandomRange v-model="state.marginNoiseOpacity" title="Opacity" :min="0" :max="1" :step="0.01" />
+              </template>
 
-        <OptionItem title="Pixel Opacity">
-          <OptionSlider v-model="state.pixelOpacity" :min="0" :max="1" :step="0.01" />
-        </OptionItem>        
-        <OptionItem title="Light Opacity">
-          <OptionSlider v-model="state.pixelLightOpacity" :min="0" :max="1" :step="0.01" />
-        </OptionItem>     
-        <OptionItem title="Dark Opacity">
-          <OptionSlider v-model="state.pixelDarkOpacity" :min="0" :max="1" :step="0.01" />
-        </OptionItem>           
+              <div class="mb-3">
+                <label class="form-label">Safe Space</label>
+                <OptionSelectGroup v-model="state.marginNoiseSpace" :options="['full', 'marker', 'minimal', 'extreme', 'none']" />
+              </div>
 
-        <OptionItem title="Promo Text">
-          <input v-model="state.promoText" type="text"
-            class="border border-base rounded bg-secondary py-0.5 pl-2 text-sm">
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">Render Type</label>
+                <OptionSelectGroup v-model="state.renderPointsType" :options="['all', 'function', 'data', 'guide', 'marker']" />
+              </div>
 
-        <OptionItem title="Promo Font Size">
-          <OptionSlider v-model="state.promoTextSize" :min="10" :max="60" :step="1" unit="px" />
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">Seed</label>
+                <div class="input-group">
+                  <input v-model.number="state.seed" type="number" class="form-control">
+                  <button class="btn btn-outline-secondary" @click="state.seed = Math.round(Math.random() * 100000)">
+                    <i class="bi-arrow-clockwise"></i>
+                  </button>
+                </div>
+              </div>
 
-        <OptionItem title="Logo" div>
-          <OptionColor v-if="state.logoImage?.startsWith('#')" v-model="state.logoImage" />
-          <button v-else class="relative text-xs text-button">
-            <img v-if="state.logoImage" :src="state.logoImage"
-              class="absolute inset-0 z-0 h-full w-full rounded object-cover opacity-50">
-            <div class="i-ri-upload-line z-1" />
-            <div class="z-1">
-              Upload
-            </div>
-            <ImageUpload v-model="state.logoImage" />
-          </button>
-          <button v-if="state.logoImage" class="p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
-            title="Clear">
-            <div class="i-carbon-close" @click="state.logoImage = undefined" />
-          </button>
-          <div class="flex-auto" />
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">Background</label>
+                <div class="d-flex align-items-center">
+                  <OptionColor v-if="state.backgroundImage?.startsWith('#')" v-model="state.backgroundImage" />
+                  <button v-else class="btn btn-outline-secondary position-relative">
+                    <img v-if="state.backgroundImage" :src="state.backgroundImage" class="position-absolute top-0 start-0 w-100 h-100 rounded opacity-50">
+                    <i class="bi-upload"></i> Upload
+                    <ImageUpload v-model="state.backgroundImage" />
+                  </button>
+                  <button v-if="state.backgroundImage" class="btn btn-outline-secondary ms-2" @click="state.backgroundImage = undefined">
+                    <i class="bi-x"></i>
+                  </button>
+                  <button v-if="!state.backgroundImage" class="btn btn-outline-secondary ms-2" @click="state.backgroundImage = '#888888'">
+                    <i class="bi-palette"></i>
+                  </button>
+                </div>
+              </div>
 
-        <OptionItem title="Logo Scale">
-          <OptionSlider v-model="state.logoScale" :min="0.2" :max="0.6" :step="0.01" unit="%" />
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">Pixel Opacity</label>
+                <OptionSlider v-model="state.pixelOpacity" :min="0" :max="1" :step="0.01" />
+              </div>
 
-        <div class="border-t border-base my-1" />
+              <div class="mb-3">
+                <label class="form-label">Light Opacity</label>
+                <OptionSlider v-model="state.pixelLightOpacity" :min="0" :max="1" :step="0.01" />
+              </div>
 
-        <OptionItem title="Colors" div @reset="() => { state.lightColor = '#ffffff'; state.darkColor = '#000000' }">
-          <div class="flex gap-2">
-            <OptionColor v-model="state.lightColor" />
-            <OptionColor v-model="state.darkColor" />
-            <label class="flex items-center gap-2 ml-2">
-              <OptionCheckbox v-model="state.invert" />
-              <span class="text-sm opacity-75">Invert</span>
-            </label>
-          </div>
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">Dark Opacity</label>
+                <OptionSlider v-model="state.pixelDarkOpacity" :min="0" :max="1" :step="0.01" />
+              </div>
 
-        <div class="border-t border-base my-1" />
+              <div class="mb-3">
+                <label class="form-label">Promo Text</label>
+                <input v-model="state.promoText" type="text" class="form-control">
+              </div>
 
-        <OptionItem title="Min Version">
-          <OptionSlider v-model="state.minVersion" :min="1" :max="state.maxVersion" :step="1" />
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">Promo Font Size</label>
+                <OptionSlider v-model="state.promoTextSize" :min="10" :max="60" :step="1" unit="px" />
+              </div>
 
-        <OptionItem title="Max Version">
-          <OptionSlider v-model="state.maxVersion" :min="state.minVersion" :max="40" :step="1" />
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">Logo</label>
+                <div class="d-flex align-items-center">
+                  <OptionColor v-if="state.logoImage?.startsWith('#')" v-model="state.logoImage" />
+                  <button v-else class="btn btn-outline-secondary position-relative">
+                    <img v-if="state.logoImage" :src="state.logoImage" class="position-absolute top-0 start-0 w-100 h-100 rounded opacity-50">
+                    <i class="bi-upload"></i> Upload
+                    <ImageUpload v-model="state.logoImage" />
+                  </button>
+                  <button v-if="state.logoImage" class="btn btn-outline-secondary ms-2" @click="state.logoImage = undefined">
+                    <i class="bi-x"></i>
+                  </button>
+                </div>
+              </div>
 
-        <OptionItem title="Pixel Size">
-          <OptionSlider v-model="state.scale" :min="1" :max="50" :step="1" unit="px" />
-        </OptionItem>
+              <div class="mb-3">
+                <label class="form-label">Logo Scale</label>
+                <OptionSlider v-model="state.logoScale" :min="0.2" :max="0.6" :step="0.01" unit="%" />
+              </div>
 
-        <OptionItem title="Pixel Scale (smaller pixel fill)">
-          <OptionSlider v-model="state.dotScale" :min="0.5" :max="1.1" :step="0.01" unit="%" />
-        </OptionItem>
+              <hr>
 
+              <div class="mb-3">
+                <label class="form-label">Colors</label>
+                <div class="d-flex align-items-center">
+                  <OptionColor v-model="state.lightColor" class="me-2" />
+                  <OptionColor v-model="state.darkColor" class="me-2" />
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" v-model="state.invert" id="invertColors">
+                    <label class="form-check-label" for="invertColors">Invert</label>
+                  </div>
+                </div>
+              </div>
 
-        <div class="border-t border-base my-1" />
+              <hr>
 
-        <OptionItem title="Effect">
-          <OptionSelectGroup v-model="state.effect" :options="['none', 'crystalize', 'liquidify']" />
-        </OptionItem>
+              <div class="mb-3 d-none">
+                <label class="form-label">Min Version</label>
+                <OptionSlider v-model="state.minVersion" :min="1" :max="state.maxVersion" :step="1" />
+              </div>
 
-        <template v-if="state.effect === 'crystalize'">
-          <OptionItem title="Radius" nested>
-            <OptionSlider v-model="state.effectCrystalizeRadius" :min="1" :max="20" :step="0.5" />
-          </OptionItem>
-        </template>
-        <template v-if="state.effect === 'liquidify'">
-          <OptionItem title="Distort Radius" nested>
-            <OptionSlider v-model="state.effectLiquidifyDistortRadius" :min="1" :max="40" :step="1" />
-          </OptionItem>
-          <OptionItem title="Blur Radius" nested>
-            <OptionSlider v-model="state.effectLiquidifyRadius" :min="1" :max="40" :step="1" />
-          </OptionItem>
-          <OptionItem title="Threshold" nested @reset="state.effectLiquidifyThreshold = 128">
-            <OptionSlider v-model="state.effectLiquidifyThreshold" :min="1" :max="254" :step="1" unit="/256" />
-          </OptionItem>
-        </template>
+              <div class="mb-3  d-none">
+                <label class="form-label">Max Version</label>
+                <OptionSlider v-model="state.maxVersion" :min="state.minVersion" :max="40" :step="1" />
+              </div>
 
-        <template v-if="state.effect !== 'none'">
-          <OptionItem title="Effect Timing">
-            <OptionSelectGroup v-model="state.effectTiming" :options="['before', 'after']" />
-          </OptionItem>
-        </template>
+              <div class="mb-3">
+                <label class="form-label">Pixel Size</label>
+                <OptionSlider v-model="state.scale" :min="1" :max="50" :step="1" unit="px" />
+              </div>
 
-        <div class="border-t border-base my-1" />
+              <div class="mb-3">
+                <label class="form-label">Pixel Scale (smaller pixel fill)</label>
+                <OptionSlider v-model="state.dotScale" :min="0.5" :max="1.1" :step="0.01" unit="%" />
+              </div>
 
-        <OptionItem title="Transform" />
-        <OptionItem title="Perspective X" nested @reset="state.transformPerspectiveX = 0">
-          <OptionSlider v-model="state.transformPerspectiveX" :min="-0.5" :max="0.5" :step="0.01" :default="0" />
-        </OptionItem>
-        <OptionItem title="Perspective Y" nested @reset="state.transformPerspectiveY = 0">
-          <OptionSlider v-model="state.transformPerspectiveY" :min="-0.5" :max="0.5" :step="0.01" :default="0" />
-        </OptionItem>
-        <OptionItem title="Scale" nested @reset="state.transformScale = 1">
-          <OptionSlider v-model="state.transformScale" :min="0.5" :max="2" :step="0.01" :default="1" />
-        </OptionItem>
-      </div>
-      <div class="flex gap-2">
-        <button class="text-sm opacity-75 text-button hover:opacity-100" @click="downloadState()">
-          <div class="i-ri-download-2-line" />
-          Save state
-        </button>
-        <button class="relative text-sm opacity-75 text-button hover:opacity-100">
-          <div class="i-ri-upload-2-line" />
-          Load state
-          <input type="file" accept="application/json"
-            class="absolute bottom-0 left-0 right-0 top-0 z-10 max-h-full max-w-full cursor-pointer opacity-0"
-            @input="readState">
-        </button>
-        <div class="flex-auto" />
-        <button class="text-sm opacity-75 text-button hover:text-red hover:opacity-100" @click="reset()">
-          <div class="i-ri-delete-bin-6-line" />
-          Reset State
-        </button>
-      </div>
-    </div>
-    <div ref="rightPanelEl">
-      <div class="flex flex-col gap-2" :style="floating ? {
-        position: 'fixed',
-        top: '10px',
-        left: `${rightPanelRect.left}px`,
-        // width: `${rightPanelRect.width}px`,
-        width: `20vw`,
-      } : {}">
-        <canvas ref="canvas" class="w-full" width="1000" height="1000" border="~ base rounded" />
+              <hr>
 
-        <div v-if="qrcode" class="border border-base rounded p-3 pl-6 pr-0 flex flex-col gap-2">
-          <div class="grid grid-cols-6 gap-1 items-center">
-            <div class="text-sm opacity-50">
-              Size
-            </div>
-            <div>
-              {{ qrcode.size }}
-            </div>
-            <div class="text-sm opacity-50">
-              Mask
-            </div>
-            <div>
-              {{ qrcode.maskPattern }}
-            </div>
-            <div class="text-sm opacity-50">
-              Version
-            </div>
-            <div>
-              {{ qrcode.version }}
+              <div class="mb-3  d-none">
+                <label class="form-label">Effect</label>
+                <OptionSelectGroup v-model="state.effect" :options="['none', 'crystalize', 'liquidify']" />
+              </div>
+
+              <template v-if="state.effect === 'crystalize'">
+                <div class="mb-3  d-none">
+                  <label class="form-label">Radius</label>
+                  <OptionSlider v-model="state.effectCrystalizeRadius" :min="1" :max="20" :step="0.5" />
+                </div>
+              </template>
+
+              <template v-if="state.effect === 'liquidify'">
+                <div class="mb-3  d-none">
+                  <label class="form-label">Distort Radius</label>
+                  <OptionSlider v-model="state.effectLiquidifyDistortRadius" :min="1" :max="40" :step="1" />
+                </div>
+                <div class="mb-3  d-none">
+                  <label class="form-label">Blur Radius</label>
+                  <OptionSlider v-model="state.effectLiquidifyRadius" :min="1" :max="40" :step="1" />
+                </div>
+                <div class="mb-3  d-none">
+                  <label class="form-label">Threshold</label>
+                  <OptionSlider v-model="state.effectLiquidifyThreshold" :min="1" :max="254" :step="1" unit="/256" />
+                </div>
+              </template>
+
+              <template v-if="state.effect !== 'none'">
+                <div class="mb-3  d-none">
+                  <label class="form-label">Effect Timing</label>
+                  <OptionSelectGroup v-model="state.effectTiming" :options="['before', 'after']" />
+                </div>
+              </template>
+
+              <hr>
+
+              <div class="mb-3">
+                <label class="form-label">Transform</label>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Perspective X</label>
+                <OptionSlider v-model="state.transformPerspectiveX" :min="-0.5" :max="0.5" :step="0.01" :default="0" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Perspective Y</label>
+                <OptionSlider v-model="state.transformPerspectiveY" :min="-0.5" :max="0.5" :step="0.01" :default="0" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Scale</label>
+                <OptionSlider v-model="state.transformScale" :min="0.5" :max="2" :step="0.01" :default="1" />
+              </div>
             </div>
           </div>
-          <div v-if="generateQRCodeInfo" class="grid grid-cols-[1.5fr_2fr_1fr_1.5fr] gap-1 items-center">
-            <div class="text-sm opacity-50">
-              Dimension
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary btn-sm" @click="downloadState()">
+              <i class="bi-download"></i> Save state
+            </button>
+            <div class="position-relative">
+              <button class="btn btn-outline-secondary btn-sm">
+                <i class="bi-upload"></i> Load state
+              </button>
+              <input type="file" accept="application/json" class="position-absolute top-0 start-0 opacity-0 w-100 h-100" @input="readState">
             </div>
-            <div class="text-sm">
-              {{ generateQRCodeInfo.width }} x {{ generateQRCodeInfo.height }}
-            </div>
-            <div class="text-sm opacity-50">
-              Aspect
-            </div>
-            <div class="text-sm">
-              {{ getAspectRatio(generateQRCodeInfo.width, generateQRCodeInfo.height) }}
-            </div>
+            <button class="btn btn-outline-danger btn-sm ms-auto" @click="reset()">
+              <i class="bi-trash"></i> Reset State
+            </button>
           </div>
         </div>
-        <button class="py-2 text-sm text-button" @click="download()">
-          <div class="i-ri-download-line" />
-          Download
-        </button>
-        <button class="py-2 text-sm text-button" @click="sendCompare()">
-          <div class="i-ri-send-backward" />
-          Send to Compare
-        </button>
-        <button v-if="hasParentWindow" class="py-2 text-sm text-button" @click="sendToWebUI()">
-          <div class="i-ri-file-upload-line" />
-          Send to ControlNet
-        </button>
-        <div v-if="mayNotScannable" border="~ amber-6/60 rounded" bg-amber-5:10 px3 py2 text-sm text-amber-6>
-          This QR Code may or may not be scannable. Please verify before using.
-        </div>
-        <div v-if="hasNonCenteredMargin" border="~ yellow-6/60 rounded" bg-yellow-5:10 px3 py2 text-sm text-yellow-6>
-          The <b>compare tab</b> does not support non-centered QR Code yet. If you generated with this QR Code, you'll
-          need
-          to verify the result manually.
-        </div>
-        <div v-if="state.transformPerspectiveX !== 0 || state.transformPerspectiveY !== 0 || state.transformScale !== 1"
-          border="~ yellow-6/60 rounded" bg-yellow-5:10 px3 py2 text-sm text-yellow-6>
-          The <b>compare tab</b> does not support transformations. If you generated with this QR Code, you'll need to
-          verify
-          the result manually.
-        </div>
-        <div v-if="state.renderPointsType !== 'all'" border="~ indigo/60 rounded" bg-indigo-5:10 px3 py2 text-sm
-          text-indigo>
-          This is a partial QR Code. It does <b>not</b> contain all the necessary data to be scannable.
-        </div>
       </div>
+      <div class="col-lg-7" ref="rightPanelEl">
+        <div class="d-flex flex-column gap-2" :class="{ 'position-fixed': floating }" :style="floating ? { top: '10px', left: `${rightPanelRect.left}px`, width: '20vw' } : {}">
+          <canvas ref="canvas" class="w-100" width="1000" height="1000"></canvas>
 
-      <div my8 h-1px border="t base" w-10 lg:hidden />
-    </div>
-  </div>
-
-  <div v-if="isOverDropZone" fixed bottom-0 left-0 right-0 top-0 z-200 flex bg-black:20 backdrop-blur-10>
-    <div id="upload-zone-qrcode" flex="~ col gap-3 items-center justify-center" m10 ml-1 w-full op40
-      :class="uploadTarget === 'qrcode' ? 'bg-gray:20 op100 border-base' : ''" border="3 dashed transparent rounded-xl">
-      <div i-carbon-qr-code text-20 />
-      <div text-xl>
-        Scan QR Code
+          <div v-if="qrcode" class="card d-none">
+            <div class="card-body">
+              <div class="row g-2">
+                <div class="col-4">
+<small class="text-muted">Size</small>
+                  <div>{{ qrcode.size }}</div>
+                </div>
+                <div class="col-4">
+                  <small class="text-muted">Mask</small>
+                  <div>{{ qrcode.maskPattern }}</div>
+                </div>
+                <div class="col-4">
+                  <small class="text-muted">Version</small>
+                  <div>{{ qrcode.version }}</div>
+                </div>
+              </div>
+              <div v-if="generateQRCodeInfo" class="row g-2 mt-2">
+                <div class="col-6">
+                  <small class="text-muted">Dimension</small>
+                  <div>{{ generateQRCodeInfo.width }} x {{ generateQRCodeInfo.height }}</div>
+                </div>
+                <div class="col-6">
+                  <small class="text-muted">Aspect</small>
+                  <div>{{ getAspectRatio(generateQRCodeInfo.width, generateQRCodeInfo.height) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" @click="download()">
+            <i class="bi-download"></i> Download
+          </button>
+          <div v-if="mayNotScannable" class="alert alert-warning" role="alert">
+            This QR Code may or may not be scannable. Please verify before using.
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <DialogScan v-if="uploadQR" :model-value="true" :qrcode="uploadQR" :state="props.state"
-    @update:model-value="uploadQR = undefined" />
+  <div v-if="isOverDropZone" class="position-fixed top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center bg-black bg-opacity-25">
+    <div id="upload-zone-qrcode" class="d-flex flex-column align-items-center justify-content-center p-5 bg-light bg-opacity-75 border border-3 border-dashed rounded-3" :class="{ 'border-primary': uploadTarget === 'qrcode' }">
+      <i class="bi-qr-code display-1"></i>
+      <div class="fs-4">Scan QR Code</div>
+    </div>
+  </div>
+
+  <DialogScan v-if="uploadQR" :model-value="true" :qrcode="uploadQR" :state="props.state" @update:model-value="uploadQR = undefined" />
 </template>

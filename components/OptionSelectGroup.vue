@@ -19,13 +19,13 @@ const value = defineModel<string | number>('modelValue', {
       :class="[
         idx ? 'border-start border-secondary ms-n1' : '',
         i === modelValue ? 'bg-secondary text-white' : '',
-        'border-bottom'
+        'border-bottom border-secondary'
       ]"
       :title="titles?.[idx]"
     >
       <div
         :class="[
-          i === modelValue ? '' : 'opacity-35',
+          i === modelValue ? '' : 'opacity-50',
           titles?.[idx] ? '' : 'text-capitalize',
           classes?.[idx] || '',
         ]"
@@ -33,11 +33,11 @@ const value = defineModel<string | number>('modelValue', {
         {{ titles?.[idx] ?? i }}
       </div>
       <input
-        :value="i"
-        @input="$emit('update:modelValue', $event.target.value)"
+        v-model="modelValue"
         type="radio"
+        :value="i"
         :title="titles?.[idx]"
-        class="position-absolute inset-0 opacity-0"
+        class="position-absolute top-0 start-0 w-100 h-100 opacity-0"
       >
     </label>
   </fieldset>

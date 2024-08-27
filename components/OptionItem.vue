@@ -27,7 +27,7 @@ function reset() {
         class="opacity-40"
         :class="typeof nested === 'number' ? 'bi bi-arrow-return-right' : ''"
         :style="typeof nested === 'number' ? { marginLeft: `${nested * 0.5 + 0.5}rem` } : { marginLeft: '0.25rem' }"
-      ></div>
+      />
       <div
         v-if="!description"
         class="small opacity-75"
@@ -46,6 +46,6 @@ function reset() {
         {{ title }}
       </div>
     </div>
-    <slot></slot>
+    <slot />
   </component>
 </template>

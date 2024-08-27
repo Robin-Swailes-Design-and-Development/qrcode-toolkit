@@ -18,14 +18,14 @@ const value = defineModel<string | number>('modelValue', {
       class="position-relative px-2 py-1 mb-n1 hover-bg-light"
       :class="[
         idx ? 'border-start border-secondary ms-n1' : '',
-        i === modelValue ? 'bg-secondary text-white' : '',
+        i === value ? 'bg-secondary text-white' : '',
         'border-bottom border-secondary'
       ]"
       :title="titles?.[idx]"
     >
       <div
         :class="[
-          i === modelValue ? '' : 'opacity-50',
+          i === value ? '' : 'opacity-50',
           titles?.[idx] ? '' : 'text-capitalize',
           classes?.[idx] || '',
         ]"
@@ -33,7 +33,7 @@ const value = defineModel<string | number>('modelValue', {
         {{ titles?.[idx] ?? i }}
       </div>
       <input
-        v-model="modelValue"
+        v-model="value"
         type="radio"
         :value="i"
         :title="titles?.[idx]"

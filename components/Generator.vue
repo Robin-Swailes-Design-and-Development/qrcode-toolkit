@@ -220,17 +220,11 @@ watch(
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-lg-5">
+      <div class="col-lg-7">
         <div class="d-flex flex-column gap-2">
-          <textarea v-model="state.text" placeholder="Text to encode" class="form-control"></textarea>
+          <textarea v-model="state.text" placeholder="Target" class="form-control"></textarea>
           <div class="card">
             <div class="card-body">
-              <div class="mb-3">
-                <label class="form-label">Rotate</label>
-                <OptionSelectGroup v-model="state.rotate" :options="[0, 90, 180, 270]" :titles="['0°', '90°', '180°', '270°']" />
-              </div>
-
-              <hr>
 
               <div class="mb-3">
                 <label class="form-label">Pixel Style</label>
@@ -267,6 +261,13 @@ watch(
 
               <hr>
 
+              <div class="mb-3">
+                <label class="form-label">Rotate</label>
+                <OptionSelectGroup v-model="state.rotate" :options="[0, 90, 180, 270]" :titles="['0°', '90°', '180°', '270°']" />
+              </div>
+
+              <hr>
+              
               <div class="mb-3">
                 <label class="form-label">Background</label>
                 <div class="d-flex align-items-center">
@@ -368,8 +369,8 @@ watch(
           </div>
         </div>
       </div>
-      <div class="col-lg-7" ref="rightPanelEl">
-        <div class="d-flex flex-column gap-2" :class="{ 'position-fixed': floating }" :style="floating ? { top: '10px', left: `${rightPanelRect.left}px`, width: '20vw' } : {}">
+      <div class="col-lg-5" ref="rightPanelEl">
+        <div class="d-flex flex-column gap-2" :class="'position-sticky'" style="top: '10px';">
           <canvas ref="canvas" class="w-100" width="1000" height="1000"></canvas>
 
           <button class="btn btn-primary" @click="download()">

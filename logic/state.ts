@@ -25,9 +25,9 @@ export const toggleDark = useToggle(isDark)
 export function defaultGeneratorState(): QRCodeGeneratorState {
   return {
     text: '',
-    ecc: 'L',
+    ecc: 'H',
     margin: 2,
-    scale: 20,
+    scale: 50,
     dotScale: 1,
     lightColor: '#ffffff',
     darkColor: '#000000',

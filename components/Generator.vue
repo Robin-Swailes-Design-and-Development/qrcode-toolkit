@@ -383,9 +383,9 @@ watch(
                     <OptionSlider v-model="state.promoTextSize" :min="10" :max="60" :step="1" unit="px" />
                   </div>
                   
-                  <div class="mb-3">
-                    <label class="form-label">Pixel Scale (smaller pixel fill)</label>
-                    <OptionSlider v-model="state.dotScale" :min="0.5" :max="1.1" :step="0.01" unit="%" />
+                  <div v-if="['diamond', 'dot', 'square'].includes(state.pixelStyle)" class="mb-3">
+                    <label class="form-label">Pixel Size</label>
+                    <OptionSlider v-model="state.dotScale" :min="0.7" :max="1.1" :step="0.01" unit="%" />
                   </div>
                 </div>
               </div>

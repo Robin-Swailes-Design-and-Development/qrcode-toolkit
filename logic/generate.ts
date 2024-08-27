@@ -596,6 +596,15 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
     }
 
     //safari dots- leaves fragmanets using bigger dots? TODO
+    function dotForRounded(color = isDark ? darkColor : lightColor) {
+      ctx.strokeStyle = 'none';
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x * cell + halfcell, y * cell + halfcell, halfcell, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    //safari dots- leaves fragmanets using bigger dots? TODO
     function dot(color = isDark ? darkColor : lightColor, dotScale = state.dotScale + 0.01) {
       ctx.strokeStyle = 'none';
       ctx.fillStyle = color;
@@ -668,7 +677,7 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
       diamond()
     }
     else if (_pixelStyle === 'squircle') {
-      dot()
+      dotForRounded()
       for (let i = 0; i < 4; i++) {
         if (rand(x, y, `squircle-${i}`) < 0.5)
           corner(i)
@@ -765,7 +774,7 @@ export async function generateQRCode(outCanvas: HTMLCanvasElement, state: QRCode
           }
         }
       }
-      dot()
+      dotForRounded()
     }
     else {
       square()

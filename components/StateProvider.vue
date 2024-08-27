@@ -67,49 +67,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <div flex="~ gap-2 items-center wrap">
-    <button
-      flex="~ gap-1.5  items-center" text-button
-      :class="view === 'generator' ? 'bg-secondary' : 'op50'"
-      @click="view = 'generator'"
-    >
-      <div i-ri-qr-code-line />
-      Generator
-    </button>
-    <button
-      flex="~ gap-1.5 items-center" text-button
-      :class="view === 'compare' ? 'bg-secondary' : 'op50'"
-      @click="view = 'compare'"
-    >
-      <div i-ri-compasses-2-line />
-      Compare
-    </button>
-    <button
-      flex="~ gap-1.5 items-center" text-button
-      :class="view === 'verify' ? 'bg-secondary' : 'op50'"
-      @click="view = 'verify'"
-    >
-      <div i-ri-qr-scan-2-line />
-      Verify
-    </button>
-    <button
-      flex="~ gap-1.5 items-center" text-button
-      :class="view === 'camera' ? 'bg-secondary' : 'op50'"
-      @click="view = 'camera'"
-    >
-      <div i-ri-camera-line />
-      Camera
-    </button>
-    <div flex-auto />
-    <button
-      flex="~ gap-1.5 items-center" ml2 text-sm text-button
-      :class="view === 'credit' ? 'bg-secondary' : 'op50'"
-      @click="view = 'credit'"
-    >
-      Credits
-    </button>
-  </div>
-
   <div v-show="view === 'generator'" w-full>
     <Generator :state="state" />
   </div>

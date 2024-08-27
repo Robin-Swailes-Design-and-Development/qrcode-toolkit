@@ -15,7 +15,7 @@ const value = defineModel<string | number>('modelValue', {
     <label
       v-for="(i, idx) of options"
       :key="i"
-      class="position-relative px-2 py-1 mb-n1 hover-bg-light"
+      class="position-relative px-2 py-1 hover-bg-light"
       :class="[
         idx ? 'border-start ms-n1' : '',
         i === value ? 'bg-secondary text-white' : '',

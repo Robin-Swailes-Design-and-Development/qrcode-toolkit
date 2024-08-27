@@ -31,6 +31,7 @@ const state = computed(() => props.state.qrcode)
 const rightPanelRect = reactive(useElementBounding(rightPanelEl))
 const floating = computed(() => rightPanelRect.top < 10 && isLargeScreen.value)
 
+
 const canvas = ref<HTMLCanvasElement>()
 
 async function run() {
@@ -134,7 +135,13 @@ const colorPalette = [
 const patternColors = [...colorPalette];
 const backgroundColors = [...colorPalette];
 
-const debouncedRun = debounce(run, 250, { trailing: true })
+const debouncedRun = debounce(run, 250, { trailing: true });
+
+const showPixelSize = computed(() => {
+  const styles = ['diamond', 'dot', 'square'];
+  return styles.includes(state.value.pixelStyle) ||
+         styles.includes(state.value.markerStyle);
+});
 
 const mayNotScannable = computed(() => {
   if ((state.value.marginNoise || state.value.backgroundImage) && state.value.marginNoiseSpace === 'none')
@@ -234,7 +241,7 @@ watch(
                     <OptionSelectGroup v-model="state.pixelStyle" :options="PixelStyles" :classes="PixelStyleIcons" />
                   </div>
                   
-                  <div class="mb">
+                  <div class="mb-3 border-top pt-3">
                     <label class="form-label">{{ state.markers.length ? 'Marker 1' : 'Markers' }}</label>
                     <button class="d-none btn btn-outline-secondary btn-sm float-end" @click="toggleMarkerStyleExpand">
                       <i :class="state.markers.length ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
@@ -261,10 +268,14 @@ watch(
                     <OptionSelectGroup v-model="state.markerSub" :options="MarkerSubShapes" :classes="MarkerSubShapeIcons" />
                   </div>
                   
-                  <div class="mb-3">
-                    <label class="form-label d-block d-none">Rotate</label>
+                  <div class="mb-3 d-none">
+                    <label class="form-label d-block">Rotate</label>
                     <OptionSelectGroup v-model="state.rotate" :options="[0, 90, 180, 270]" :titles="['0°', '90°', '180°', '270°']" />
                   </div>
+                    <div v-if="showPixelSize" class="mb-3 border-top pt-3">
+                        <label class="form-label">Pixel Size</label>
+                        <OptionSlider v-model="state.dotScale" :min="0.7" :max="1.1" :step="0.01" unit="%" />
+                    </div>
                 </div>
               </div>
             </div>
@@ -287,7 +298,7 @@ watch(
                     </div>
                   </div>
 
-                  <div class="mb-4">
+                  <div class="mb-3 border-top pt-3">
                     <label class="form-label">Background Color</label>
                     <div class="d-flex align-items-center mb-2">
                       <OptionColor v-model="state.lightColor" class="me-2" />
@@ -332,9 +343,8 @@ watch(
                     <label class="form-label">Logo Scale</label>
                     <OptionSlider v-model="state.logoScale" :min="0.2" :max="0.3" :step="0.01" unit="%" />
                   </div>
-                </div>
 
-                <div class="mb-3">
+                  <div class="mb-3 border-top pt-3">
                     <label class="form-label">Background</label>
                     <div class="d-flex align-items-center">
                       <OptionColor v-if="state.backgroundImage?.startsWith('#')" v-model="state.backgroundImage" />
@@ -352,6 +362,8 @@ watch(
 
                     </div>
                   </div>
+                </div>
+
               </div>
             </div>
             
@@ -383,10 +395,6 @@ watch(
                     <OptionSlider v-model="state.promoTextSize" :min="10" :max="60" :step="1" unit="px" />
                   </div>
                   
-                  <div v-if="['diamond', 'dot', 'square'].includes(state.pixelStyle)" class="mb-3">
-                    <label class="form-label">Pixel Size</label>
-                    <OptionSlider v-model="state.dotScale" :min="0.7" :max="1.1" :step="0.01" unit="%" />
-                  </div>
                 </div>
               </div>
             </div>

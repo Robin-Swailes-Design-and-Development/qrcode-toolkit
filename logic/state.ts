@@ -51,7 +51,7 @@ export function defaultGeneratorState(): QRCodeGeneratorState {
     renderPointsType: 'all',
 
     separateOpacity: false,
-    pixelOpacity: 1,
+    pixelOpacity: 0.99,
     pixelLightOpacity: 1,
     pixelDarkOpacity: 1,
 

@@ -51,7 +51,7 @@ function download() {
 
 function reset() {
   // eslint-disable-next-line no-alert
-  if (confirm('Are you sure to reset all state?'))
+  if (confirm('Are you sure to reset state?'))
     Object.assign(state.value, defaultGeneratorState())
 }
 
@@ -174,43 +174,6 @@ function toggleMarkerStyleExpand() {
 
 const uploadQR = ref<string>()
 
-const { isOverDropZone } = useDropZone(document.body, {
-  onDrop(files) {
-    if (view.value !== 'generator')
-      return
-    if (!files || !uploadTarget.value)
-      return
-
-    const file = files[0]
-    if (file.type === 'image/png' || file.type === 'image/jpeg') {
-      const reader = new FileReader()
-      reader.onload = () => {
-        const data = reader.result as string
-        if (uploadTarget.value === 'qrcode')
-          uploadQR.value = data
-      }
-      reader.readAsDataURL(file)
-    }
-  },
-  onLeave() {
-    uploadTarget.value = undefined
-  },
-  onOver(_, event) {
-    if (uploadQR.value)
-      uploadQR.value = undefined
-    if (view.value !== 'generator')
-      return
-    if (!isOverDropZone.value)
-      return
-
-    const chain = Array.from(document.elementsFromPoint(event.clientX, event.clientY))
-    if (chain.find(el => el.id === 'upload-zone-qrcode'))
-      uploadTarget.value = 'qrcode'
-    else
-      uploadTarget.value = undefined
-  },
-})
-
 watch(
   () => state.value,
   () => debouncedRun(),
@@ -221,138 +184,195 @@ watch(
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-7">
-        <div class="d-flex flex-column gap-2">
-          <textarea v-model="state.text" placeholder="Target" class="form-control"></textarea>
-          <div class="card">
-            <div class="card-body">
-
-              <div class="mb-3">
-                <label class="form-label">Pixel Style</label>
-                <OptionSelectGroup v-model="state.pixelStyle" :options="PixelStyles" :classes="PixelStyleIcons" />
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">{{ state.markers.length ? 'Marker 1' : 'Markers' }}</label>
-                <button class="btn btn-outline-secondary btn-sm float-end" @click="toggleMarkerStyleExpand">
-                  <i :class="state.markers.length ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
-                </button>
-              </div>
-
-              <template v-if="!state.markers.length">
-                <SettingsMarkerStyle :state="state" nested number="Marker" />
-              </template>
-              <template v-else>
-                <SettingsMarkerStyle :state="state" nested />
-                <div class="mb-3">
-                  <label class="form-label">Marker 2</label>
-                </div>
-                <SettingsMarkerStyle :state="state.markers[0]" nested />
-                <div class="mb-3">
-                  <label class="form-label">Marker 3</label>
-                </div>
-                <SettingsMarkerStyle :state="state.markers[1]" nested />
-                <hr>
-              </template>
-
-              <div v-if="qrcode?.version !== 1" class="mb-3">
-                <label class="form-label">Sub Markers</label>
-                <OptionSelectGroup v-model="state.markerSub" :options="MarkerSubShapes" :classes="MarkerSubShapeIcons" />
-              </div>
-
-              <hr>
-
-              <div class="mb-3">
-                <label class="form-label">Rotate</label>
-                <OptionSelectGroup v-model="state.rotate" :options="[0, 90, 180, 270]" :titles="['0°', '90°', '180°', '270°']" />
-              </div>
-
-              <hr>
-              
-              <div class="mb-3">
-                <label class="form-label">Background</label>
-                <div class="d-flex align-items-center">
-                  <OptionColor v-if="state.backgroundImage?.startsWith('#')" v-model="state.backgroundImage" />
-                  <button v-else class="btn btn-outline-secondary position-relative">
-                    <img v-if="state.backgroundImage" :src="state.backgroundImage" class="top-0 start-0 w-100 h-100 rounded opacity-50">
-                    <i class="bi-upload"></i> Upload
-                    <ImageUpload v-model="state.backgroundImage" />
-                  </button>
-                  <button v-if="state.backgroundImage" class="btn btn-outline-secondary ms-2" @click="state.backgroundImage = undefined">
-                    <i class="bi-x"></i>
-                  </button>
-                  <button v-if="!state.backgroundImage" class="btn btn-outline-secondary ms-2" @click="state.backgroundImage = '#888888'">
-                    <i class="bi-palette"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Pixel Opacity</label>
-                <OptionSlider v-model="state.pixelOpacity" :min="0" :max="1" :step="0.01" />
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Light Opacity</label>
-                <OptionSlider v-model="state.pixelLightOpacity" :min="0" :max="1" :step="0.01" />
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Dark Opacity</label>
-                <OptionSlider v-model="state.pixelDarkOpacity" :min="0" :max="1" :step="0.01" />
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Promo Text</label>
-                <input v-model="state.promoText" type="text" class="form-control">
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Promo Font Size</label>
-                <OptionSlider v-model="state.promoTextSize" :min="10" :max="60" :step="1" unit="px" />
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Logo</label>
-                <div class="d-flex align-items-center">
-                  <OptionColor v-if="state.logoImage?.startsWith('#')" v-model="state.logoImage" />
-                  <button v-else class="btn btn-outline-secondary position-relative">
-                    <img v-if="state.logoImage" :src="state.logoImage" class="top-0 start-0 w-100 h-100 rounded opacity-50">
-                    <i class="bi-upload"></i> Upload
-                    <ImageUpload v-model="state.logoImage" />
-                  </button>
-                  <button v-if="state.logoImage" class="btn btn-outline-secondary ms-2" @click="state.logoImage = undefined">
-                    <i class="bi-x"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Logo Scale</label>
-                <OptionSlider v-model="state.logoScale" :min="0.2" :max="0.6" :step="0.01" unit="%" />
-              </div>
-
-              <hr>
-
-              <div class="mb-3">
-                <label class="form-label">Colors</label>
-                <div class="d-flex align-items-center">
-                  <OptionColor v-model="state.lightColor" class="me-2" />
-                  <OptionColor v-model="state.darkColor" class="me-2" />
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" v-model="state.invert" id="invertColors">
-                    <label class="form-check-label" for="invertColors">Invert</label>
+        <div class="d-flex flex-column gap-3">
+          <textarea v-model="state.text" placeholder="Target text or URL" class="form-control"></textarea>
+          
+          <ul class="nav nav-tabs" id="optionTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="style-tab" data-bs-toggle="tab" data-bs-target="#style" type="button" role="tab" aria-controls="style" aria-selected="true">Style & Markers</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="colors-tab" data-bs-toggle="tab" data-bs-target="#colors" type="button" role="tab" aria-controls="colors" aria-selected="false">Colors</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="logo-bg-tab" data-bs-toggle="tab" data-bs-target="#logo-bg" type="button" role="tab" aria-controls="logo-bg" aria-selected="false">Logo & Background</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other" type="button" role="tab" aria-controls="other" aria-selected="false">Other Options</button>
+            </li>
+          </ul>
+          
+          <div class="tab-content" id="optionTabsContent">
+            <div class="tab-pane fade show active" id="style" role="tabpanel" aria-labelledby="style-tab">
+              <div class="card">
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label class="form-label">Pixel Style</label>
+                    <OptionSelectGroup v-model="state.pixelStyle" :options="PixelStyles" :classes="PixelStyleIcons" />
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">{{ state.markers.length ? 'Marker 1' : 'Markers' }}</label>
+                    <button class="d-none btn btn-outline-secondary btn-sm float-end" @click="toggleMarkerStyleExpand">
+                      <i :class="state.markers.length ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                    </button>
+                  </div>
+                  
+                  <template v-if="!state.markers.length">
+                    <SettingsMarkerStyle :state="state" nested number="Marker" />
+                  </template>
+                  <template v-else>
+                    <SettingsMarkerStyle :state="state" nested />
+                    <div class="mb-3">
+                      <label class="form-label">Marker 2</label>
+                    </div>
+                    <SettingsMarkerStyle :state="state.markers[0]" nested />
+                    <div class="mb-3">
+                      <label class="form-label">Marker 3</label>
+                    </div>
+                    <SettingsMarkerStyle :state="state.markers[1]" nested />
+                  </template>
+                  
+                  <div v-if="qrcode?.version !== 1" class="mb-3">
+                    <label class="form-label">Sub Markers</label>
+                    <OptionSelectGroup v-model="state.markerSub" :options="MarkerSubShapes" :classes="MarkerSubShapeIcons" />
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Rotate</label>
+                    <OptionSelectGroup v-model="state.rotate" :options="[0, 90, 180, 270]" :titles="['0°', '90°', '180°', '270°']" />
                   </div>
                 </div>
               </div>
+            </div>
+            
+            <div class="tab-pane fade" id="colors" role="tabpanel" aria-labelledby="colors-tab">
+              <div class="card">
+                <div class="card-body">                  
+                  <div class="mb-3">
+                    <label class="form-label">Pattern Colors</label>
+                    <OptionColor v-model="state.darkColor" class="me-2" />
+                    <div class="d-flex flex-wrap gap-2">
+                      <button v-for="color in ['#000000', '#333333', '#666666', '#999999', '#CCCCCC']" 
+                              :key="color" 
+                              class="btn btn-sm" 
+                              :style="{ backgroundColor: color, width: '30px', height: '30px' }"
+                              @click="state.darkColor = color"></button>
+                    </div>
+                  </div>
 
-              <hr>
+                  <div class="mb-3">
+                    <OptionColor v-model="state.lightColor" class="me-2" />
+                    <label class="form-label">Background Color</label>
+                    <div class="d-flex flex-wrap gap-2">
+                      <button v-for="color in ['#FFFFFF', '#F0F0F0', '#E0E0E0', '#D0D0D0', '#C0C0C0']" 
+                              :key="color" 
+                              class="btn btn-sm" 
+                              :style="{ backgroundColor: color, width: '30px', height: '30px' }"
+                              @click="state.lightColor = color"></button>
+                    </div>
+                  </div>
+                  
+                    <div class="d-flex align-items-center">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" v-model="state.invert" id="invertColors">
+                        <label class="form-check-label" for="invertColors">Invert</label>
+                      </div>
+                  </div>
 
-              <div class="mb-3">
-                <label class="form-label">Pixel Scale (smaller pixel fill)</label>
-                <OptionSlider v-model="state.dotScale" :min="0.5" :max="1.1" :step="0.01" unit="%" />
+                </div>
+              </div>
+            </div>
+            
+            <div class="tab-pane fade" id="logo-bg" role="tabpanel" aria-labelledby="logo-bg-tab">
+              <div class="card">
+                <div class="card-body">                  
+                  <div class="mb-3">
+                    <label class="form-label">Logo</label>
+                    <div class="d-flex align-items-center">
+                      <OptionColor v-if="state.logoImage?.startsWith('#')" v-model="state.logoImage" />
+                      <button v-else class="btn btn-outline-secondary position-relative">
+                        <img v-if="state.logoImage" :src="state.logoImage" class="top-0 start-0 w-100 h-100 rounded opacity-50">
+                        <i class="bi-upload"></i> Upload
+                        <ImageUpload v-model="state.logoImage" />
+                      </button>
+                      <button v-if="state.logoImage" class="btn btn-outline-secondary ms-2" @click="state.logoImage = undefined">
+                        <i class="bi-x"></i>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Logo Scale</label>
+                    <OptionSlider v-model="state.logoScale" :min="0.2" :max="0.3" :step="0.01" unit="%" />
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Background</label>
+                    <div class="d-flex align-items-center">
+                      <OptionColor v-if="state.backgroundImage?.startsWith('#')" v-model="state.backgroundImage" />
+                      <button v-else class="btn btn-outline-secondary position-relative">
+                        <img v-if="state.backgroundImage" :src="state.backgroundImage" class="top-0 start-0 w-100 h-100 rounded opacity-50">
+                        <i class="bi-upload"></i> Upload
+                        <ImageUpload v-model="state.backgroundImage" />
+                      </button>
+                      <button v-if="state.backgroundImage" class="btn btn-outline-secondary ms-2" @click="state.backgroundImage = undefined">
+                        <i class="bi-x"></i>
+                      </button>
+                      <button v-if="!state.backgroundImage" class="btn btn-outline-secondary ms-2 d-none" @click="state.backgroundImage = '#888888'">
+                        <i class="bi-palette"></i>
+                      </button>
+
+                    </div>
+
+                  <div class="d-flex align-items-center">
+                    <div class="mb-3">
+                      <label class="form-label">Background Pixel Opacity</label>
+                      <OptionSlider v-model="state.pixelLightOpacity" :min="0" :max="1" :step="0.1" />
+                    </div>
+                  </div>
+                  </div>
+              </div>
+            </div>
+            
+            <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="other-tab">
+              <div class="card">
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label class="form-label">Pixel Opacity</label>
+                    <OptionSlider v-model="state.pixelOpacity" :min="0" :max="1" :step="0.01" />
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Light Opacity</label>
+                    <OptionSlider v-model="state.pixelLightOpacity" :min="0" :max="1" :step="0.1" />
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Dark Opacity</label>
+                    <OptionSlider v-model="state.pixelDarkOpacity" :min="0" :max="1" :step="0.01" />
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Promo Text</label>
+                    <input v-model="state.promoText" type="text" class="form-control">
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Promo Font Size</label>
+                    <OptionSlider v-model="state.promoTextSize" :min="10" :max="60" :step="1" unit="px" />
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Pixel Scale (smaller pixel fill)</label>
+                    <OptionSlider v-model="state.dotScale" :min="0.5" :max="1.1" :step="0.01" unit="%" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          
           <div class="d-flex gap-2">
             <button class="btn btn-outline-secondary btn-sm" @click="downloadState()">
               <i class="bi-download"></i> Save state
@@ -381,13 +401,6 @@ watch(
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div v-if="isOverDropZone" class="position-fixed top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center bg-black bg-opacity-25">
-    <div id="upload-zone-qrcode" class="d-flex flex-column align-items-center justify-content-center p-5 bg-light bg-opacity-75 border border-3 border-dashed rounded-3" :class="{ 'border-primary': uploadTarget === 'qrcode' }">
-      <i class="bi-qr-code display-1"></i>
-      <div class="fs-4">Scan QR Code</div>
     </div>
   </div>
 

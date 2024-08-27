@@ -217,7 +217,6 @@ watch(
   { deep: true, immediate: true },
 )
 </script>
-
 <template>
   <div class="container-fluid">
     <div class="row">
@@ -226,22 +225,6 @@ watch(
           <textarea v-model="state.text" placeholder="Text to encode" class="form-control"></textarea>
           <div class="card">
             <div class="card-body">
-              <div class="mb-3 d-none">
-                <label class="form-label">Error Correction</label>
-                <div class="d-flex align-items-center">
-                  <OptionSelectGroup v-model="state.ecc" :options="['L', 'M', 'Q', 'H']" class="me-2" />
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" v-model="state.boostECC" id="boostECC">
-                    <label class="form-check-label" for="boostECC">Boost ECC</label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="mb-3 d-none">
-                <label class="form-label">Mask Pattern</label>
-                <OptionSelectGroup v-model="state.maskPattern" :options="[-1, 0, 1, 2, 3, 4, 5, 6, 7]" :titles="['Auto']" />
-              </div>
-
               <div class="mb-3">
                 <label class="form-label">Rotate</label>
                 <OptionSelectGroup v-model="state.rotate" :options="[0, 90, 180, 270]" :titles="['0°', '90°', '180°', '270°']" />
@@ -283,45 +266,6 @@ watch(
               </div>
 
               <hr>
-
-              <SettingsMargin class="d-none" v-model="state.margin" :full-customizable="true" />
-
-              <div class="mb-3 d-none">
-                <label class="form-label">Margin Noise</label>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" v-model="state.marginNoise" id="marginNoise">
-                  <label class="form-check-label" for="marginNoise">Add some random data points to the margin</label>
-                </div>
-              </div>
-
-              <template v-if="state.marginNoise">
-                <div class="mb-3 d-none">
-                  <label class="form-label">Noise Rate</label>
-                  <OptionSlider v-model="state.marginNoiseRate" :min="0" :max="1" :step="0.01" />
-                </div>
-
-                <SettingsRandomRange v-model="state.marginNoiseOpacity" title="Opacity" :min="0" :max="1" :step="0.01" />
-              </template>
-
-              <div class="mb-3 d-none">
-                <label class="form-label">Safe Space</label>
-                <OptionSelectGroup v-model="state.marginNoiseSpace" :options="['full', 'marker', 'minimal', 'extreme', 'none']" />
-              </div>
-
-              <div class="mb-3 d-none">
-                <label class="form-label">Render Type</label>
-                <OptionSelectGroup v-model="state.renderPointsType" :options="['all', 'function', 'data', 'guide', 'marker']" />
-              </div>
-
-              <div class="mb-3 d-none">
-                <label class="form-label">Seed</label>
-                <div class="input-group">
-                  <input v-model.number="state.seed" type="number" class="form-control">
-                  <button class="btn btn-outline-secondary" @click="state.seed = Math.round(Math.random() * 100000)">
-                    <i class="bi-arrow-clockwise"></i>
-                  </button>
-                </div>
-              </div>
 
               <div class="mb-3">
                 <label class="form-label">Background</label>
@@ -402,78 +346,9 @@ watch(
 
               <hr>
 
-              <div class="mb-3 d-none">
-                <label class="form-label">Min Version</label>
-                <OptionSlider v-model="state.minVersion" :min="1" :max="state.maxVersion" :step="1" />
-              </div>
-
-              <div class="mb-3  d-none">
-                <label class="form-label">Max Version</label>
-                <OptionSlider v-model="state.maxVersion" :min="state.minVersion" :max="40" :step="1" />
-              </div>
-
-              <div class="mb-3 d-none">
-                <label class="form-label">Pixel Size</label>
-                <OptionSlider v-model="state.scale" :min="1" :max="50" :step="1" unit="px" />
-              </div>
-
               <div class="mb-3">
                 <label class="form-label">Pixel Scale (smaller pixel fill)</label>
                 <OptionSlider v-model="state.dotScale" :min="0.5" :max="1.1" :step="0.01" unit="%" />
-              </div>
-
-              <hr>
-
-              <div class="mb-3  d-none">
-                <label class="form-label">Effect</label>
-                <OptionSelectGroup v-model="state.effect" :options="['none', 'crystalize', 'liquidify']" />
-              </div>
-
-              <template v-if="state.effect === 'crystalize'">
-                <div class="mb-3  d-none">
-                  <label class="form-label">Radius</label>
-                  <OptionSlider v-model="state.effectCrystalizeRadius" :min="1" :max="20" :step="0.5" />
-                </div>
-              </template>
-
-              <template v-if="state.effect === 'liquidify'">
-                <div class="mb-3  d-none">
-                  <label class="form-label">Distort Radius</label>
-                  <OptionSlider v-model="state.effectLiquidifyDistortRadius" :min="1" :max="40" :step="1" />
-                </div>
-                <div class="mb-3  d-none">
-                  <label class="form-label">Blur Radius</label>
-                  <OptionSlider v-model="state.effectLiquidifyRadius" :min="1" :max="40" :step="1" />
-                </div>
-                <div class="mb-3  d-none">
-                  <label class="form-label">Threshold</label>
-                  <OptionSlider v-model="state.effectLiquidifyThreshold" :min="1" :max="254" :step="1" unit="/256" />
-                </div>
-              </template>
-
-              <template v-if="state.effect !== 'none'">
-                <div class="mb-3  d-none">
-                  <label class="form-label">Effect Timing</label>
-                  <OptionSelectGroup v-model="state.effectTiming" :options="['before', 'after']" />
-                </div>
-              </template>
-
-              <hr>
-
-              <div class="mb-3">
-                <label class="form-label">Transform</label>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Perspective X</label>
-                <OptionSlider v-model="state.transformPerspectiveX" :min="-0.5" :max="0.5" :step="0.01" :default="0" />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Perspective Y</label>
-                <OptionSlider v-model="state.transformPerspectiveY" :min="-0.5" :max="0.5" :step="0.01" :default="0" />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Scale</label>
-                <OptionSlider v-model="state.transformScale" :min="0.5" :max="2" :step="0.01" :default="1" />
               </div>
             </div>
           </div>
@@ -497,34 +372,6 @@ watch(
         <div class="d-flex flex-column gap-2" :class="{ 'position-fixed': floating }" :style="floating ? { top: '10px', left: `${rightPanelRect.left}px`, width: '20vw' } : {}">
           <canvas ref="canvas" class="w-100" width="1000" height="1000"></canvas>
 
-          <div v-if="qrcode" class="card d-none">
-            <div class="card-body">
-              <div class="row g-2">
-                <div class="col-4">
-                  <small class="text-muted">Size</small>
-                  <div>{{ qrcode.size }}</div>
-                </div>
-                <div class="col-4">
-                  <small class="text-muted">Mask</small>
-                  <div>{{ qrcode.maskPattern }}</div>
-                </div>
-                <div class="col-4">
-                  <small class="text-muted">Version</small>
-                  <div>{{ qrcode.version }}</div>
-                </div>
-              </div>
-              <div v-if="generateQRCodeInfo" class="row g-2 mt-2">
-                <div class="col-6">
-                  <small class="text-muted">Dimension</small>
-                  <div>{{ generateQRCodeInfo.width }} x {{ generateQRCodeInfo.height }}</div>
-                </div>
-                <div class="col-6">
-                  <small class="text-muted">Aspect</small>
-                  <div>{{ getAspectRatio(generateQRCodeInfo.width, generateQRCodeInfo.height) }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
           <button class="btn btn-primary" @click="download()">
             <i class="bi-download"></i> Download
           </button>

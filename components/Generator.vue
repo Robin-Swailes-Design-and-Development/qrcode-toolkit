@@ -293,7 +293,7 @@ watch(
                   </div>
                   <div v-if="showPixelSize" class="mb-3 border-top pt-3">
                     <label class="form-label">Pixel Size</label>
-                    <OptionSlider v-model="state.dotScale" :min="0.7" :max="1.1" :step="0.01" unit="%" />
+                    <OptionSlider v-model="state.dotScale" :min="0.7" :max="1.1" :step="0.01" />
                   </div>
                 </div>
               </div>
@@ -303,7 +303,7 @@ watch(
               <div class="card">
                 <div class="card-body">
                   <div class="mb-4">
-                    <label class="form-label">Pattern Color</label>
+                    <label class="form-label">Pattern Colour</label>
                     <div class="d-flex align-items-center mb-2">
                       <OptionColor v-model="state.darkColor" class="me-2" />
                     </div>
@@ -315,7 +315,7 @@ watch(
                   </div>
 
                   <div class="mb-3 border-top pt-3">
-                    <label class="form-label">Background Color</label>
+                    <label class="form-label">Background Colour</label>
                     <div class="d-flex align-items-center mb-2">
                       <OptionColor v-model="state.lightColor" class="me-2" />
                     </div>

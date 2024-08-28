@@ -202,6 +202,19 @@ function toggleMarkerStyleExpand() {
   }
 }
 
+const socialLogos = [
+  { name: 'Instagram', file: '/img/logos/instagram.png' },
+  { name: 'Facebook', file: '/img/logos/facebook.png' },
+  { name: 'Twitter', file: '/img/logos/twitter.png' },
+  { name: 'LinkedIn', file: '/img/logos/linkedin.png' },
+  { name: 'YouTube', file: '/img/logos/youtube.png' },
+  { name: 'TikTok', file: '/img/logos/tik-tok.png' },
+  { name: 'WhatsApp', file: '/img/logos/whatsapp.png' },
+];
+
+function selectLogo(logoFile: string) {
+  state.value.logoImage = logoFile;
+}
 const uploadQR = ref<string>()
 
 watch(
@@ -321,28 +334,47 @@ watch(
               </div>
             </div>
             
+            
+
+
+
+
+
             <div class="tab-pane fade" id="logo-bg" role="tabpanel" aria-labelledby="logo-bg-tab">
-              <div class="card">
-                <div class="card-body">                  
-                  <div class="mb-3">
-                    <label class="form-label">Logo</label>
-                    <div class="d-flex align-items-center">
-                      <OptionColor v-if="state.logoImage?.startsWith('#')" v-model="state.logoImage" />
-                      <button v-else class="btn btn-outline-secondary position-relative">
-                        <img v-if="state.logoImage" :src="state.logoImage" class="top-0 start-0 w-100 h-100 rounded opacity-50">
-                        <i class="bi-upload"></i> Upload
-                        <ImageUpload v-model="state.logoImage" />
-                      </button>
-                      <button v-if="state.logoImage" class="btn btn-outline-secondary ms-2" @click="state.logoImage = undefined">
-                        <i class="bi-x"></i>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <div class="mb-3">
-                    <label class="form-label">Logo Scale</label>
-                    <OptionSlider v-model="state.logoScale" :min="0.2" :max="0.3" :step="0.01" unit="%" />
-                  </div>
+    <div class="card">
+      <div class="card-body">                  
+        <div class="mb-3">
+          <label class="form-label">Logo</label>
+          <div class="d-flex align-items-center mb-2">
+            <div class="position-relative" style="width: 100px; height: 100px;">
+              <ImageUpload v-model="state.logoImage" />
+              <img
+                   :src="state.logoImage" 
+                   alt="Logo" 
+                   class="position-absolute top-0 start-0 w-100 h-100 p-2 object-fit-contain"
+              >
+            </div>
+
+            <button v-if="state.logoImage" class="btn btn-outline-secondary ms-2" @click="state.logoImage = undefined">
+              <i class="bi-x"></i>
+            </button>
+          </div>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <button v-for="logo in socialLogos" 
+                    :key="logo.name" 
+                    class="btn p-1"
+                    @click="selectLogo(logo.file)"
+                    :title="logo.name">
+              <img :src="logo.file" :alt="logo.name" style="width: 32px; height: 32px;">
+            </button>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Logo Scale</label>
+          <OptionSlider v-model="state.logoScale" :min="0.2" :max="0.3" :step="0.01" unit="%" />
+        </div>
+
 
                   <div class="mb-3 border-top pt-3">
                     <label class="form-label">Background</label>

@@ -233,7 +233,7 @@ watch(
             </label>
           </div>
         </OptionItem>
-      <div class="border border-base rounded flex flex-col gap-2 p-4 d-none">
+      <div class="border border-base rounded flex flex-col gap-2 p-4 hidden">
         <OptionItem title="Error Correction" div>
           <OptionSelectGroup v-model="state.ecc" :options="['L', 'M', 'Q', 'H']" />
           <label class="flex items-center gap-2 ml-2">
@@ -440,7 +440,7 @@ watch(
           <OptionSlider v-model="state.transformScale" :min="0.5" :max="2" :step="0.01" :default="1" />
         </OptionItem>
       </div>
-      <div class="flex gap-2  d-none">
+      <div class="flex gap-2  hidden">
         <button class="text-sm opacity-75 text-button hover:opacity-100" @click="downloadState()">
           <div class="i-ri-download-2-line" />
           Save state
@@ -469,7 +469,7 @@ watch(
       } : {}">
         <canvas ref="canvas" class="w-full" width="1000" height="1000" border="~ base rounded" />
 
-        <div v-if="qrcode" class=" d-none border border-base rounded p-3 pl-6 pr-0 flex flex-col gap-2">
+        <div v-if="qrcode" class=" hidden border border-base rounded p-3 pl-6 pr-0 flex flex-col gap-2">
           <div class="grid grid-cols-6 gap-1 items-center">
             <div class="text-sm opacity-50">
               Size
@@ -505,15 +505,19 @@ watch(
             </div>
           </div>
         </div>
-        <button class=" d-none py-2 text-sm text-button" @click="download()">
-          <div class="i-ri-download-line" />
+        <button class="border py-2 text-sm text-button" @click="download()" style="
+    display: block;
+    width: 140px;
+    margin: auto;
+">
+          <div class="fa-solid fa-download" />
           Download
         </button>
-        <button class=" d-none py-2 text-sm text-button" @click="sendCompare()">
+        <button class=" hidden py-2 text-sm text-button" @click="sendCompare()">
           <div class="i-ri-send-backward" />
           Send to Compare
         </button>
-        <button v-if="hasParentWindow" class=" d-none py-2 text-sm text-button" @click="sendToWebUI()">
+        <button v-if="hasParentWindow" class=" hidden py-2 text-sm text-button" @click="sendToWebUI()">
           <div class="i-ri-file-upload-line" />
           Send to ControlNet
         </button>

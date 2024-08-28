@@ -379,7 +379,7 @@ watch(
                     <label class="form-label">Background</label>
                     <div class="row">
                       <div class="col-auto">
-                        <div class="position-relative image-upload-wrap"">
+                        <div class="position-relative image-upload-wrap">
                           <ImageUpload v-model="state.backgroundImage" />
                           <img v-if="state.backgroundImage" :src="state.backgroundImage" alt="Background"
                             class="position-absolute top-0 start-0 w-100 h-100 p-2 object-fit-cover">

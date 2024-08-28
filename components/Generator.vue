@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { debounce } from 'perfect-debounce'
+import { router } from '@inertiajs/vue3'
 import { sendParentEvent } from '../logic/messaging'
 import { generateQRCode } from '../logic/generate'
 import { dataUrlGeneratedQRCode, defaultGeneratorState, generateQRCodeInfo, hasParentWindow, isLargeScreen, qrcode } from '../logic/state'
@@ -38,14 +39,19 @@ watch(() => props.testMode, (newValue) => {
   }
 });
 
-console.log('test mode');
-console.log(props.testMode);
+watch(
+  () => dataUrlGeneratedQRCode.value,
+  () => {
+    isScannableConfirmed.value = false;
+  }
+)
 
 const rightPanelEl = ref<HTMLElement>()
 const uploadTarget = ref<'image' | 'qrcode'>()
 const state = computed(() => props.state.qrcode)
 const rightPanelRect = reactive(useElementBounding(rightPanelEl))
 const floating = computed(() => rightPanelRect.top < 10 && isLargeScreen.value)
+const isScannableConfirmed = ref(false);
 
 
 const canvas = ref<HTMLCanvasElement>()
@@ -57,13 +63,29 @@ async function run() {
   dataUrlGeneratedQRCode.value = canvas.value.toDataURL()
 }
 
+const redirectLink = '/qr';
 function download() {
-  if (!canvas.value)
-    return
-  const a = document.createElement('a')
-  a.href = dataUrlGeneratedQRCode.value!
-  a.download = `${state.value.text.replace(/\W/g, '_')}[${state.value.ecc}_x${state.value.scale}].png`
-  a.click()
+  if (!canvas.value) return;
+
+  if (!isScannableConfirmed.value) {
+    const confirmScannable = confirm('Have you checked that your QR code is scannable? Click OK to proceed with download, or Cancel to check again.');
+    if (!confirmScannable) {
+      return; // User wants to check again, so we don't proceed with download
+    }
+    isScannableConfirmed.value = true; // Set to true so we don't ask again if they click download again
+  }
+
+  const a = document.createElement('a');
+  a.href = dataUrlGeneratedQRCode.value!;
+  a.download = `${state.value.text.replace(/\W/g, '_')}[qr_coutures_com].png`;
+  
+  a.addEventListener('click', () => {
+    setTimeout(() => {
+      router.visit(redirectLink);
+    }, 100);
+  });
+  
+  a.click();
 }
 
 function reset() {
@@ -473,7 +495,7 @@ watch(
             </div>
           </div>
 
-          <div class="d-flex gap-2">
+          <div class="d-flex gap-2 d-none">
             <button class="btn btn-outline-secondary btn-sm" @click="downloadState()">
               <i class="bi-download"></i> Save state
             </button>

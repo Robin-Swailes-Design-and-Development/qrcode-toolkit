@@ -26,6 +26,18 @@ const props = defineProps<{
   testMode: boolean
 }>()
 
+const placeholderText = ref('');
+
+function handleTestModeInput(event) {
+  placeholderText.value = event.target.value;
+}
+
+watch(() => props.testMode, (newValue) => {
+  if (newValue) {
+    placeholderText.value = '';
+  }
+});
+
 console.log('test mode');
 console.log(props.testMode);
 
@@ -232,7 +244,25 @@ watch(
     <div class="row">
       <div class="col-lg-7">
         <div class="d-flex flex-column gap-3">
-          <textarea v-model="state.text" placeholder="Target text or URL" class="form-control"></textarea>
+          <div class="position-relative">
+            <textarea
+              v-if="!props.testMode"
+              v-model="state.text"
+              placeholder="Target text or URL"
+              class="form-control"
+            ></textarea>
+            <textarea
+              v-else
+              v-model="placeholderText"
+              placeholder="Target text or URL"
+              class="form-control"
+              :class="{ 'is-invalid': placeholderText }"
+              @input="handleTestModeInput"
+            ></textarea>
+            <div v-if="props.testMode && placeholderText" class="invalid-feedback d-block">
+              Please complete the payment to generate a QR code with your custom text.
+            </div>
+          </div>
 
           <ul class="nav nav-tabs" id="optionTabs" role="tablist">
             <li class="nav-item" role="presentation">
@@ -464,9 +494,13 @@ watch(
         <div class="d-flex flex-column gap-2" :class="'position-sticky'" style="top: '10px';">
           <canvas ref="canvas" class="w-100" width="1000" height="1000"></canvas>
 
-          <button class="btn btn-primary" @click="download()">
+          <button v-if="!props.testMode" class="btn btn-primary" @click="download()">
             <i class="bi-download"></i> Download
           </button>
+
+          <!-- New slot for payment button, only shown in test mode -->
+          <slot v-if="props.testMode" name="payment-button"></slot>
+
           <div v-if="mayNotScannable" class="alert alert-warning" role="alert">
             This QR Code may or may not be scannable. Please verify before using.
           </div>

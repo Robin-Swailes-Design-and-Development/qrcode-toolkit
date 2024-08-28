@@ -69,7 +69,11 @@ onMounted(() => {
 
 <template>
   <div v-show="view === 'generator'" w-full>
-    <Generator :testMode="testMode" :state="state" />
+    <Generator :testMode="testMode" :state="state">
+      <template #payment-button>
+        <slot name="payment-button"></slot>
+      </template>
+    </Generator>
   </div>
   <div v-show="view === 'compare'" w-full>
     <div v-if="!isLargeScreen" flex px20 py50 text-center op50>

@@ -222,7 +222,18 @@ watch(
     <div class="flex flex-col gap-2">
       <textarea v-model="state.text" placeholder="Text to encode"
         class="border border-base rounded bg-secondary px-4 py-2" />
-      <div class="border border-base rounded flex flex-col gap-2 p-4">
+
+        <OptionItem title="Colors" div @reset="() => { state.lightColor = '#ffffff'; state.darkColor = '#000000' }">
+          <div class="flex gap-2">
+            <OptionColor v-model="state.lightColor" />
+            <OptionColor v-model="state.darkColor" />
+            <label class="flex items-center gap-2 ml-2">
+              <OptionCheckbox v-model="state.invert" />
+              <span class="text-sm opacity-75">Invert</span>
+            </label>
+          </div>
+        </OptionItem>
+      <div class="border border-base rounded flex flex-col gap-2 p-4 d-none">
         <OptionItem title="Error Correction" div>
           <OptionSelectGroup v-model="state.ecc" :options="['L', 'M', 'Q', 'H']" />
           <label class="flex items-center gap-2 ml-2">
@@ -368,17 +379,6 @@ watch(
 
         <div class="border-t border-base my-1" />
 
-        <OptionItem title="Colors" div @reset="() => { state.lightColor = '#ffffff'; state.darkColor = '#000000' }">
-          <div class="flex gap-2">
-            <OptionColor v-model="state.lightColor" />
-            <OptionColor v-model="state.darkColor" />
-            <label class="flex items-center gap-2 ml-2">
-              <OptionCheckbox v-model="state.invert" />
-              <span class="text-sm opacity-75">Invert</span>
-            </label>
-          </div>
-        </OptionItem>
-
         <div class="border-t border-base my-1" />
 
         <OptionItem title="Min Version">
@@ -440,7 +440,7 @@ watch(
           <OptionSlider v-model="state.transformScale" :min="0.5" :max="2" :step="0.01" :default="1" />
         </OptionItem>
       </div>
-      <div class="flex gap-2">
+      <div class="flex gap-2  d-none">
         <button class="text-sm opacity-75 text-button hover:opacity-100" @click="downloadState()">
           <div class="i-ri-download-2-line" />
           Save state
@@ -469,7 +469,7 @@ watch(
       } : {}">
         <canvas ref="canvas" class="w-full" width="1000" height="1000" border="~ base rounded" />
 
-        <div v-if="qrcode" class="border border-base rounded p-3 pl-6 pr-0 flex flex-col gap-2">
+        <div v-if="qrcode" class=" d-none border border-base rounded p-3 pl-6 pr-0 flex flex-col gap-2">
           <div class="grid grid-cols-6 gap-1 items-center">
             <div class="text-sm opacity-50">
               Size
@@ -505,15 +505,15 @@ watch(
             </div>
           </div>
         </div>
-        <button class="py-2 text-sm text-button" @click="download()">
+        <button class=" d-none py-2 text-sm text-button" @click="download()">
           <div class="i-ri-download-line" />
           Download
         </button>
-        <button class="py-2 text-sm text-button" @click="sendCompare()">
+        <button class=" d-none py-2 text-sm text-button" @click="sendCompare()">
           <div class="i-ri-send-backward" />
           Send to Compare
         </button>
-        <button v-if="hasParentWindow" class="py-2 text-sm text-button" @click="sendToWebUI()">
+        <button v-if="hasParentWindow" class=" d-none py-2 text-sm text-button" @click="sendToWebUI()">
           <div class="i-ri-file-upload-line" />
           Send to ControlNet
         </button>

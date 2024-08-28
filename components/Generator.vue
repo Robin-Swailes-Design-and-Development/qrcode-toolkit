@@ -424,7 +424,7 @@ watch(
                       </div>
                       <div class="col" v-if="state.backgroundImage">
                         <div class="mb-3">
-                          <label class="form-label">Background Pixel Opacity</label>
+                          <label class="form-label">Pixel Opacity</label>
                           <OptionSlider v-model="state.pixelLightOpacity" :min="0" :max="1" :step="0.1" />
                         </div>
 

@@ -22,8 +22,12 @@ import ImageUpload from 'Robin-Swailes-Design-and-Development-QR/components/Imag
 
 
 const props = defineProps<{
-  state: State
+  state: State,
+  testMode: boolean
 }>()
+
+console.log('test mode');
+console.log(props.testMode);
 
 const rightPanelEl = ref<HTMLElement>()
 const uploadTarget = ref<'image' | 'qrcode'>()
@@ -243,7 +247,7 @@ watch(
               <button class="nav-link" id="logo-bg-tab" data-bs-toggle="tab" data-bs-target="#logo-bg" type="button"
                 role="tab" aria-controls="logo-bg" aria-selected="false">Logo & Background</button>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item d-none" role="presentation">
               <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other" type="button"
                 role="tab" aria-controls="other" aria-selected="false">Other Options</button>
             </li>
@@ -406,7 +410,7 @@ watch(
               </div>
             </div>
 
-            <div class="tab-pane fade d-none" id="other" role="tabpanel" aria-labelledby="other-tab">
+            <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="other-tab">
               <div class="card">
                 <div class="card-body">
                   <div class="mb-3">

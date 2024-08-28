@@ -11,7 +11,8 @@ import Generator from './Generator.vue';
 import DialogGridAlign from 'Robin-Swailes-Design-and-Development-QR/components/DialogGridAlign.vue'
 
 defineProps<{
-  index: number
+  index: number,
+  testMode: boolean,
 }>()
 
 const state = useLocalStorage<State>(
@@ -33,7 +34,7 @@ useEventListener(window, 'message', (event) => {
   try {
     const json = JSON.parse(data)
     // eslint-disable-next-line no-console
-    console.log('Message from parent window', json)
+    // console.log('Message from parent window', json)
     if (json.source !== 'qrtoolkit-parent')
       return
     switch (json.event) {
@@ -58,7 +59,7 @@ useEventListener(window, 'message', (event) => {
 })
 
 // eslint-disable-next-line no-console
-console.log('State', state.value)
+// console.log('State', state.value)
 
 onMounted(() => {
   // send message to parent window to let it know we're ready
@@ -68,7 +69,7 @@ onMounted(() => {
 
 <template>
   <div v-show="view === 'generator'" w-full>
-    <Generator :state="state" />
+    <Generator :testMode="testMode" :state="state" />
   </div>
   <div v-show="view === 'compare'" w-full>
     <div v-if="!isLargeScreen" flex px20 py50 text-center op50>

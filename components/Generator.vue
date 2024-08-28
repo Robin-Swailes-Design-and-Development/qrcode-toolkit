@@ -253,13 +253,13 @@ watch(
             ></textarea>
             <textarea
               v-else
-              v-model="placeholderText"
+              v-model="state.placeholderText"
               placeholder="Target text or URL"
               class="form-control"
-              :class="{ 'is-invalid': placeholderText }"
+              :class="{ 'is-invalid': state.placeholderText }"
               @input="handleTestModeInput"
             ></textarea>
-            <div v-if="props.testMode && placeholderText" class="invalid-feedback d-block">
+            <div v-if="props.testMode && state.placeholderText" class="invalid-feedback d-block">
               Please complete the payment to generate a QR code with your custom text.
             </div>
           </div>

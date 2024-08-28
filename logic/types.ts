@@ -95,6 +95,7 @@ export interface QrCodeGeneratorMarkerState {
 
 export interface QRCodeGeneratorState extends QrCodeGeneratorMarkerState {
   text: string
+  placeholderText: string
   ecc: 'L' | 'M' | 'Q' | 'H'
   margin: number | MarginObject
   scale: number

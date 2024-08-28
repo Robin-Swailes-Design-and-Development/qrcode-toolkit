@@ -61,7 +61,7 @@ function downloadState() {
     '//': 'Generator state of RS\'s QR Toolkit',
     ...state.value,
   }
-  
+
 
   const text = JSON.stringify(data, null, 2)
   const a = document.createElement('a')
@@ -72,7 +72,7 @@ function downloadState() {
 
 // save state to db 
 function saveState() {
-  
+
 }
 
 // load state from db 
@@ -140,7 +140,7 @@ const debouncedRun = debounce(run, 250, { trailing: true });
 const showPixelSize = computed(() => {
   const styles = ['diamond', 'dot', 'square'];
   return styles.includes(state.value.pixelStyle) ||
-         styles.includes(state.value.markerStyle);
+    styles.includes(state.value.markerStyle);
 });
 
 const mayNotScannable = computed(() => {
@@ -229,22 +229,26 @@ watch(
       <div class="col-lg-7">
         <div class="d-flex flex-column gap-3">
           <textarea v-model="state.text" placeholder="Target text or URL" class="form-control"></textarea>
-          
+
           <ul class="nav nav-tabs" id="optionTabs" role="tablist">
             <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="style-tab" data-bs-toggle="tab" data-bs-target="#style" type="button" role="tab" aria-controls="style" aria-selected="true">Style & Markers</button>
+              <button class="nav-link active" id="style-tab" data-bs-toggle="tab" data-bs-target="#style" type="button"
+                role="tab" aria-controls="style" aria-selected="true">Style & Markers</button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="colors-tab" data-bs-toggle="tab" data-bs-target="#colors" type="button" role="tab" aria-controls="colors" aria-selected="false">Colours</button>
+              <button class="nav-link" id="colors-tab" data-bs-toggle="tab" data-bs-target="#colors" type="button"
+                role="tab" aria-controls="colors" aria-selected="false">Colours</button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="logo-bg-tab" data-bs-toggle="tab" data-bs-target="#logo-bg" type="button" role="tab" aria-controls="logo-bg" aria-selected="false">Logo & Background</button>
+              <button class="nav-link" id="logo-bg-tab" data-bs-toggle="tab" data-bs-target="#logo-bg" type="button"
+                role="tab" aria-controls="logo-bg" aria-selected="false">Logo & Background</button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other" type="button" role="tab" aria-controls="other" aria-selected="false">Other Options</button>
+              <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other" type="button"
+                role="tab" aria-controls="other" aria-selected="false">Other Options</button>
             </li>
           </ul>
-          
+
           <div class="tab-content" id="optionTabsContent">
             <div class="tab-pane fade show active" id="style" role="tabpanel" aria-labelledby="style-tab">
               <div class="card">
@@ -253,14 +257,14 @@ watch(
                     <label class="form-label d-block">Pixel Style</label>
                     <OptionSelectGroup v-model="state.pixelStyle" :options="PixelStyles" :classes="PixelStyleIcons" />
                   </div>
-                  
+
                   <div class="mb-3 border-top pt-3">
                     <label class="form-label">{{ state.markers.length ? 'Marker 1' : 'Markers' }}</label>
                     <button class="d-none btn btn-outline-secondary btn-sm float-end" @click="toggleMarkerStyleExpand">
                       <i :class="state.markers.length ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                     </button>
                   </div>
-                  
+
                   <template v-if="!state.markers.length">
                     <SettingsMarkerStyle :state="state" nested number="Marker" />
                   </template>
@@ -275,24 +279,26 @@ watch(
                     </div>
                     <SettingsMarkerStyle :state="state.markers[1]" nested />
                   </template>
-                  
+
                   <div v-if="qrcode?.version !== 1" class="mb-3 d-none">
                     <label class="form-label">Sub Markers</label>
-                    <OptionSelectGroup v-model="state.markerSub" :options="MarkerSubShapes" :classes="MarkerSubShapeIcons" />
+                    <OptionSelectGroup v-model="state.markerSub" :options="MarkerSubShapes"
+                      :classes="MarkerSubShapeIcons" />
                   </div>
-                  
+
                   <div class="mb-3 d-none">
                     <label class="form-label d-block">Rotate</label>
-                    <OptionSelectGroup v-model="state.rotate" :options="[0, 90, 180, 270]" :titles="['0°', '90°', '180°', '270°']" />
+                    <OptionSelectGroup v-model="state.rotate" :options="[0, 90, 180, 270]"
+                      :titles="['0°', '90°', '180°', '270°']" />
                   </div>
-                    <div v-if="showPixelSize" class="mb-3 border-top pt-3">
-                        <label class="form-label">Pixel Size</label>
-                        <OptionSlider v-model="state.dotScale" :min="0.7" :max="1.1" :step="0.01" unit="%" />
-                    </div>
+                  <div v-if="showPixelSize" class="mb-3 border-top pt-3">
+                    <label class="form-label">Pixel Size</label>
+                    <OptionSlider v-model="state.dotScale" :min="0.7" :max="1.1" :step="0.01" unit="%" />
+                  </div>
                 </div>
               </div>
             </div>
-            
+
             <div class="tab-pane fade" id="colors" role="tabpanel" aria-labelledby="colors-tab">
               <div class="card">
                 <div class="card-body">
@@ -302,12 +308,9 @@ watch(
                       <OptionColor v-model="state.darkColor" class="me-2" />
                     </div>
                     <div class="d-flex flex-wrap gap-2">
-                      <button v-for="color in patternColors" 
-                              :key="color" 
-                              class="btn btn-sm" 
-                              :style="{ backgroundColor: color, width: '30px', height: '30px', border: color === state.darkColor ? '2px solid #007bff' : '1px solid #ced4da' }"
-                              @click="state.darkColor = color"
-                              :title="color"></button>
+                      <button v-for="color in patternColors" :key="color" class="btn btn-sm"
+                        :style="{ backgroundColor: color, width: '30px', height: '30px', border: color === state.darkColor ? '2px solid #007bff' : '1px solid #ced4da' }"
+                        @click="state.darkColor = color" :title="color"></button>
                     </div>
                   </div>
 
@@ -317,12 +320,9 @@ watch(
                       <OptionColor v-model="state.lightColor" class="me-2" />
                     </div>
                     <div class="d-flex flex-wrap gap-2">
-                      <button v-for="color in backgroundColors" 
-                              :key="color" 
-                              class="btn btn-sm" 
-                              :style="{ backgroundColor: color, width: '30px', height: '30px', border: color === state.lightColor ? '2px solid #007bff' : '1px solid #ced4da' }"
-                              @click="state.lightColor = color"
-                              :title="color"></button>
+                      <button v-for="color in backgroundColors" :key="color" class="btn btn-sm"
+                        :style="{ backgroundColor: color, width: '30px', height: '30px', border: color === state.lightColor ? '2px solid #007bff' : '1px solid #ced4da' }"
+                        @click="state.lightColor = color" :title="color"></button>
                     </div>
                   </div>
 
@@ -333,105 +333,112 @@ watch(
                 </div>
               </div>
             </div>
-            
-            
+
+
 
 
 
 
 
             <div class="tab-pane fade" id="logo-bg" role="tabpanel" aria-labelledby="logo-bg-tab">
-    <div class="card">
-      <div class="card-body">                  
-        <div class="mb-3">
-          <label class="form-label">Logo</label>
-          <div class="d-flex align-items-center mb-2">
-            <div class="position-relative" style="width: 100px; height: 100px;">
-              <ImageUpload v-model="state.logoImage" />
-              <img
-                   :src="state.logoImage" 
-                   alt="Logo" 
-                   class="position-absolute top-0 start-0 w-100 h-100 p-2 object-fit-contain"
-              >
-            </div>
+              <div class="card">
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label class="form-label">Logo</label>
+                    <div class="row">
+                      <div class="col-auto align-items-center mb-2">
+                        <div class="position-relative image-upload-wrap" style="width: 100px; height: 100px;">
+                          <ImageUpload v-model="state.logoImage" />
+                          <img v-if="state.logoImage" :src="state.logoImage" alt="Logo"
+                            class="position-absolute top-0 start-0 w-100 h-100 p-2 object-fit-contain">
 
-            <button v-if="state.logoImage" class="btn btn-outline-secondary ms-2" @click="state.logoImage = undefined">
-              <i class="bi-x"></i>
-            </button>
-          </div>
-          <div class="d-flex flex-wrap gap-2 mt-2">
-            <button v-for="logo in socialLogos" 
-                    :key="logo.name" 
-                    class="btn p-1"
-                    @click="selectLogo(logo.file)"
-                    :title="logo.name">
-              <img :src="logo.file" :alt="logo.name" style="width: 32px; height: 32px;">
-            </button>
-          </div>
-        </div>
-        
-        <div class="mb-3">
-          <label class="form-label">Logo Scale</label>
-          <OptionSlider v-model="state.logoScale" :min="0.2" :max="0.3" :step="0.01" unit="%" />
-        </div>
+                          <span v-if="state.logoImage" class="close" @click="state.logoImage = undefined">
+                            <i class="bi-x"></i>
+                          </span>
+                        </div>
 
+                      </div>
+                      <div class="col mt-2">
+                        <button v-for="logo in socialLogos" :key="logo.name" class="btn p-1"
+                          @click="selectLogo(logo.file)" :title="logo.name">
+                          <img :src="logo.file" :alt="logo.name" style="width: 32px; height: 32px;">
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-if="state.logoImage" class="mb-3">
+                    <label class="form-label">Logo Scale</label>
+                    <OptionSlider v-model="state.logoScale" :min="0.2" :max="0.3" :step="0.01" unit="%" />
+                  </div>
+
+
+                  <!-- Updated Background section -->
 
                   <div class="mb-3 border-top pt-3">
                     <label class="form-label">Background</label>
-                    <div class="d-flex align-items-center">
-                      <OptionColor v-if="state.backgroundImage?.startsWith('#')" v-model="state.backgroundImage" />
-                      <button v-else class="btn btn-outline-secondary position-relative">
-                        <img v-if="state.backgroundImage" :src="state.backgroundImage" class="top-0 start-0 w-100 h-100 rounded opacity-50">
-                        <i class="bi-upload"></i> Upload
-                        <ImageUpload v-model="state.backgroundImage" />
-                      </button>
-                      <button v-if="state.backgroundImage" class="btn btn-outline-secondary ms-2" @click="state.backgroundImage = undefined">
-                        <i class="bi-x"></i>
-                      </button>
-                      <button v-if="!state.backgroundImage" class="btn btn-outline-secondary ms-2 d-none" @click="state.backgroundImage = '#888888'">
-                        <i class="bi-palette"></i>
-                      </button>
+                    <div class="row">
+                      <div class="col-auto">
+                        <div class="position-relative image-upload-wrap"">
+                          <ImageUpload v-model="state.backgroundImage" />
+                          <img v-if="state.backgroundImage" :src="state.backgroundImage" alt="Background"
+                            class="position-absolute top-0 start-0 w-100 h-100 p-2 object-fit-cover">
+                          <span v-if="state.backgroundImage" class="close" @click="state.backgroundImage = undefined">
+                            <i class="bi-x"></i>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="col" v-if="state.backgroundImage">
+                        <div class="mb-3">
+                          <label class="form-label">Background Pixel Opacity</label>
+                          <OptionSlider v-model="state.pixelLightOpacity" :min="0" :max="1" :step="0.1" />
+                        </div>
 
+                        <div class="mb-3">
+                          <label class="form-label">Pattern Opacity</label>
+                          <OptionSlider v-model="state.pixelDarkOpacity" :min="0" :max="1" :step="0.1" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
               </div>
             </div>
-            
-            <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="other-tab">
+
+            <div class="tab-pane fade d-none" id="other" role="tabpanel" aria-labelledby="other-tab">
               <div class="card">
                 <div class="card-body">
                   <div class="mb-3">
                     <label class="form-label">Pixel Opacity</label>
                     <OptionSlider v-model="state.pixelOpacity" :min="0" :max="1" :step="0.01" />
                   </div>
-                  
+
                   <div class="mb-3">
                     <label class="form-label">Light Opacity</label>
                     <OptionSlider v-model="state.pixelLightOpacity" :min="0" :max="1" :step="0.1" />
                   </div>
-                  
+
                   <div class="mb-3">
                     <label class="form-label">Dark Opacity</label>
                     <OptionSlider v-model="state.pixelDarkOpacity" :min="0" :max="1" :step="0.01" />
                   </div>
-                  
+
                   <div class="mb-3">
                     <label class="form-label">Promo Text</label>
                     <input v-model="state.promoText" type="text" class="form-control">
                   </div>
-                  
+
                   <div class="mb-3">
                     <label class="form-label">Promo Font Size</label>
                     <OptionSlider v-model="state.promoTextSize" :min="10" :max="60" :step="1" unit="px" />
                   </div>
-                  
+
                 </div>
               </div>
             </div>
           </div>
-          
+
           <div class="d-flex gap-2">
             <button class="btn btn-outline-secondary btn-sm" @click="downloadState()">
               <i class="bi-download"></i> Save state
@@ -440,7 +447,8 @@ watch(
               <button class="btn btn-outline-secondary btn-sm">
                 <i class="bi-upload"></i> Load state
               </button>
-              <input type="file" accept="application/json" class="position-absolute top-0 start-0 opacity-0 w-100 h-100" @input="readState">
+              <input type="file" accept="application/json" class="position-absolute top-0 start-0 opacity-0 w-100 h-100"
+                @input="readState">
             </div>
             <button class="btn btn-outline-danger btn-sm ms-auto" @click="reset()">
               <i class="bi-trash"></i> Reset State
@@ -463,5 +471,6 @@ watch(
     </div>
   </div>
 
-  <DialogScan v-if="uploadQR" :model-value="true" :qrcode="uploadQR" :state="props.state" @update:model-value="uploadQR = undefined" />
+  <DialogScan v-if="uploadQR" :model-value="true" :qrcode="uploadQR" :state="props.state"
+    @update:model-value="uploadQR = undefined" />
 </template>

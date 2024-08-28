@@ -13,42 +13,45 @@ const value = defineModel<number>('modelValue', {
 </script>
 
 <template>
-  <div class="relative h-22px w-60 flex-auto">
-    <input
-      v-model.number="value"
-      type="range"
-      class="slider absolute bottom-0 left-0 right-0 top-0 z-10 w-full align-top border border-base rounded overflow-hidden"
-      v-bind="props"
-    >
-    <span
-      v-if="props.default != null"
-      class="border-r border-base absolute bottom-0 top-0 h-full w-1px opacity-75"
-      :style="{ left: `${(props.default - min) / (max - min) * 100}%` }"
-    />
-  </div>
-  <div class="relative h-22px">
-    <input
-      v-model.number="value"
-      type="number"
-      class="border border-base rounded m-0 w-20 pl-2 align-top text-sm "
-      v-bind="props"
-    >
-    <span
-      v-if="props.unit"
-      class="pointer-events-none absolute right-1 top-0.5 text-xs opacity-25"
-    >
-      {{ props.unit }}
-    </span>
+  <div class="d-flex align-items-center">
+    <div class="flex-grow-1 me-2 position-relative" style="height: 22px;">
+      <input
+        v-model.number="value"
+        type="range"
+        class="slider position-absolute bottom-0 start-0 end-0 top-0 w-100 align-top border border-secondary rounded overflow-hidden"
+        v-bind="props"
+      >
+      <span
+        v-if="props.default != null"
+        class="border-end border-secondary position-absolute bottom-0 top-0 h-100"
+        style="width: 1px; opacity: 0.75;"
+        :style="{ left: `${(props.default - min) / (max - min) * 100}%` }"
+      />
+    </div>
+    <div class="position-relative" style="width: 70px;">
+      <input
+        v-model.number="value"
+        type="number"
+        class="form-control form-control-sm"
+        v-bind="props"
+      >
+      <span
+        v-if="props.unit"
+        class="position-absolute end-2 top-50 translate-middle-y text-muted small"
+        style="pointer-events: none;"
+      >
+        {{ props.unit }}
+      </span>
+    </div>
   </div>
 </template>
 
-<style>
+<style scoped>
 .slider {
   appearance: none;
   height: 22px;
   outline: none;
   opacity: 0.7;
-  -webkit-transition: .2s;
   transition: opacity .2s;
 }
 
